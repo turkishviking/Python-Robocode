@@ -6,7 +6,7 @@ Python-Robocode
 I found this project on http://sourceforge.net/p/pythonrobocode/
 I didn't seen any commit since 2012 so I have decided to develop it. Any help is welcome!
 
-* Thanks to:
+* Thanks to the original developers:
     
   * Michael Macdonald
   * Neil Morrison
@@ -37,13 +37,11 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
 
 import gamefile # necessary for the game
 
-
+#bot's name
 def name():
-    """bot's name"""
     return "Charlie_Robot"
-
+#bot's color
 def colour():
-    """ bot's color"""
     return (80,10,80)
     
 def startDirection():
