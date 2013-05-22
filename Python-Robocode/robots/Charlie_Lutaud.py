@@ -4,11 +4,9 @@ import gamefile # necessary for the game
 
 
 def name():
-    """bot's name"""
     return "Charlie_Robot"
 
 def colour():
-    """ bot's color"""
     return (80,10,80)
     
 def startDirection():
@@ -29,7 +27,7 @@ def commands():
     gamefile.fire(2)
 
     """To know the number of alive bot"""
-    gamefile.nbr_Bots_Left()
+    gamefile.nbr_bots_left()
 
     """To turn left in degrees"""
     gamefile.turn_left(180)

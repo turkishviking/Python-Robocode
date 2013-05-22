@@ -2,9 +2,9 @@ import pygame, sys, copy, pickle
 from Classes import *
 sys.path.append(sys.path[0] + "/robots")
 
-import Charlie_Robot, MaxPayne
+import Charlie_Lutaud, MaxPayne
 
-robotmodules = [Charlie_Robot, MaxPayne]
+robotmodules = [Charlie_Lutaud, MaxPayne]
 
 
 
@@ -126,7 +126,7 @@ def robotX():
 def robotY():
         return currentRobot.y
     
-def nbr_Bots_Left():
+def nbr_bots_left():
     global RobotsAlive
     return RobotsAlive
 

@@ -126,7 +126,7 @@ def robotX():
 def robotY():
         return currentRobot.y
     
-def nbr_Bots_Left():
+def nbr_bots_left():
     global RobotsAlive
     return RobotsAlive
 

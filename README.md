@@ -57,14 +57,14 @@ def commands():
     """to lock the radar with the gun"""
     gamefile.lockradar("GUN")
         
-    """to lock the unlock radar"""
+    """to unlock the radar"""
     gamefile.lockradar("FREE")
        
     """To fire"""  
     gamefile.fire(2)
 
     """To know the number of alive bot"""
-    gamefile.nbr_Bots_Left()
+    gamefile.nbr_bots_left()
 
     """To turn left in degrees"""
     gamefile.turn_left(180)
