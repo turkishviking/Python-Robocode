@@ -1,8 +1,8 @@
-![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png "Python-Robocode")
-
 Python-Robocode
 ===============
  
+![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png?raw=true "Python-Robocode")
+
 #### A Fork of Robocode for python programming
 
 I found this project on http://sourceforge.net/p/pythonrobocode/
