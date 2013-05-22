@@ -8,29 +8,29 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
 
 * Thanks to:
     
- * Michael Macdonald
-* Neil Morrison
-* Maksat Tulepov
-* Tim Storer
-* Andrew Downs
-* Stuart Glendinning
+  * Michael Macdonald
+  * Neil Morrison
+  * Maksat Tulepov
+  * Tim Storer
+  * Andrew Downs
+  * Stuart Glendinning
     
     
 * What's New & Task list:
-*    - [x]  getTargetPosition()
-*    - [x]  getTargetName()
-*    - [x]  bulletPower
-*    - [x]  on_hit_by_bullet()
-*    - [ ]  bulletSize
-*    - [ ]  WallCollision
-*    - [ ]  MapSize
-*    - [x]  Number_Of_Enmies_Left()
-*    - [ ]  GameSpeed
-*    - [x]  on_Robot_Exit()
-*    - [ ]  Battle Series
-*    - [ ]  Batlles Statistics
+    - [x]  getTargetPosition()
+    - [x]  getTargetName()
+    - [x]  bulletPower
+    - [x]  on_hit_by_bullet()
+    - [ ]  bulletSize
+    - [ ]  WallCollision
+    - [ ]  MapSize
+    - [x]  Number_Of_Enmies_Left()
+    - [ ]  GameSpeed
+    - [x]  on_Robot_Exit()
+    - [ ]  Battle Series
+    - [ ]  Batlles Statistics
     
-*Bot example:
+* Bot example (charlie_lutaud.py):
 ```python 
 # -*- coding: utf-8 -*-
 
