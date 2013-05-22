@@ -31,6 +31,7 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
     - [ ]  Batlles Statistics
     
 * Bot example (charlie_lutaud.py):
+
 ```python 
 # -*- coding: utf-8 -*-
 
