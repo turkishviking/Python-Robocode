@@ -7,16 +7,17 @@ I found this project on http://sourceforge.net/p/pythonrobocode/
 I didn't seen any commit since 2012 so I have decided to develop it. Any help is welcome!
 
 *Thanks to:
-    *Michael Macdonald
-    *Neil Morrison
-    *Maksat Tulepov
-    *Tim Storer
-    *Andrew Downs
-    *Stuart Glendinning
+    
+ *Michael Macdonald
+*Neil Morrison
+*Maksat Tulepov
+*Tim Storer
+*Andrew Downs
+*Stuart Glendinning
     
     
 *What's New & Task list:
-    *- [x]  getTargetPosition()
+*- [x]  getTargetPosition()
      - [x]  getTargetName()
      - [x]  bulletPower
      - [x]  on_hit_by_bullet()
