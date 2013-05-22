@@ -1,0 +1,71 @@
+The robocode API, working represents functions that are currently
+implemented. Draft represents functions that are currently being
+implimented but have their interface finalised. Planned represents
+functions that have not yet been implimented.
+
+functions beginning with gamefile. are called within the command or
+target_spotted functions.
+
+Working:
+		startDirection(): OPTIONAL
+				function must return the direction that the robot will
+		face at initialization (clockwise). from 0 - 360
+		colour(): NEEDED
+				  function must return a tuple from (0,0,0) to
+		(255,255,255)
+		commands():
+				function to contain the following movement commands:
+				(STEPS represents the frames / distance that the
+			command will be run for, or until a collision)
+			gamefile.move(STEPS) move a set distance
+			gamefile.turn_left(degree)
+			gamefile.turn_right(degree)
+			gamefile.stop(frames) 
+			will stop the robot for the number of frames in frames
+			gamefile.robotHealth() 
+			will return the value of the
+			robot's health (between 1 and 82)
+			gamefile.fire() will
+			attempt to fire the gun
+			gamefile.done() this is NECESSARY,
+			it must be called at the end of the loop
+
+		target_spotted(direction):
+				will be called when a target is spotted by the radar,
+				it will return the direction of the target relative to
+				the front of the robot (the same notation as used for
+				the gamefile.pointgun(direction) function)
+				
+				gamefile.pointgun(direction)
+						will point the gun in the set direction
+						relative to the front of the robot
+
+
+DRAFT:
+		gamefile.lockradar(TEXT) 
+			TEXT can be "GUN", "BASE" or
+			"FREE" to lock the radar to the surface (have them turn at
+			the same time)
+		gamefile.spinradar(TEXT)
+				text can either be "LEFT" or "RIGHT" and if the radar
+				is set to FREE it will spin in that direction.
+		
+
+
+CHARLIE VERSION:
+
+                getTargetPosition                               OK
+                getTargetName                                   OK
+                bulletPower                                     OK
+                on_hit_by_bullet()                              OK
+                bulletSize                                      NO
+                WallCollision                                   NO
+                MapSize                                         NO
+                NumberOfEnmiesLeft                              OK
+                GameSpeed                                       NO
+                on_Robot_Exit()                                 OK
+                Battle Series                                   NO
+                Batlles Statistics                              NO
+                
+		
+		

@@ -1,0 +1,20 @@
+Robots shall implement the following functions:
+(functions shown within functions are examples of what could be found there)
+create_Robot():
+		colourBase = "Red"/"Blue"/...
+		colourGun = "Red2/"Blue"/...
+		RadarType = "FixedGun"/"FixedBody"/"Free"
+		create(colourBase,colourGun,RadarType)
+
+movement:
+		turn_right(deg +baring)
+		turn_left(deg -baring)
+		move(distance in frames/pixels)
+		stop(frames)
+
++/-baring on_robot_Detected():
+		point_gun(+/- baring)
+		fire()
+
+on_hit():
+		
