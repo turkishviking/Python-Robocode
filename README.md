@@ -1,4 +1,6 @@
-Python-Robocode
+![Python-Robocode](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png) Python-Robocode
+Format: ![Alt Text](url)
+
 ===============
  
 #### A Fork of Robocode for python programming
