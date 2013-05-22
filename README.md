@@ -1,4 +1,4 @@
-![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png?raw=true "Python-Robocode") ```Python-Robocode```
+```![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png?raw=true "Python-Robocode") Python-Robocode```
 ===============
  
 
@@ -41,70 +41,66 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
 
 import gamefile # necessary for the game
 
-#bot's name
+
+# bot's name
 def name():
     return "Charlie_Robot"
-#bot's color
+    
+    
+# bot's color
 def colour():
     return (80,10,80)
+     
     
+# To begin whith a specific angle (not necessary)    
 def startDirection():
-    """ To begin whith a specific angle (not necessary)"""
     return 0
-    
-    
-def commands():
-    """ loop of bot's commands"""
-        
-    """to lock the radar with the gun"""
-    gamefile.lockradar("GUN")
-        
-    """to unlock the radar"""
-    gamefile.lockradar("FREE")
        
-    """To fire"""  
-    gamefile.fire(2)
+    
+# loop of bot's commands    
+def commands():
+    
+    gamefile.lockradar("GUN") #to lock the radar with the gun
+       
+    gamefile.lockradar("FREE") #to unlock the radar
+       
+    gamefile.fire(power) #To fire (0 < power < 10) 
 
-    """To know the number of alive bot"""
-    gamefile.nbr_bots_left()
-
-    """To turn left in degrees"""
-    gamefile.turn_left(180)
+    gamefile.nbr_bots_left() #To know the number of alive bots
     
-    """To go forward 180 steps"""
-    gamefile.move(180)
+    gamefile.turn_left(180) #To turn left in degrees
     
-    """To turn Right in degrees"""
-    gamefile.turn_right(180)
+    gamefile.move(180) #To go forward 180 steps
     
-    """To go forward 180 steps"""
-    gamefile.move(180)
+    gamefile.turn_right(180) #To turn Right in degrees
+    
+    gamefile.move(180) #To go forward 180 steps
     
     """NECESSARY for the end of the loop"""
     gamefile.done()
+    
+    
 
-
-
+#when a bot is seen
 def target_spotted(direction, targetBotName, targetX, targetY):
-    """when a bot is seen"""
     
-    """Point the gun into the target"""
-    gamefile.pointgun(direction)
+    gamefile.pointgun(direction) #Point the gun into the target
     
-    """To fire""" 
-    gamefile.fire(2)
+    gamefile.fire(2) #To fire
     
     
     
+    
+#when my bot is hit by a bullet
 def on_hit_by_bullet(blastPower, blastName):
-    """when my bot is hit by a bullet"""
+    
     print blastPower, blastName
     
     
     
-    
+#when my bot is dead    
 def on_death():
-    """when my bot is dead"""
+    
     print "i'm dead"
     
 ```
