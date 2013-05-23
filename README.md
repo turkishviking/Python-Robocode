@@ -9,7 +9,7 @@ I found this project on [sourceforge](http://sourceforge.net/p/pythonrobocode/)
 I didn't seen any commit since 2012, so I have decided to develop it. 
 Any help would be welcome!
 
-A new version comming soon! (check the branch 2.0 in beta for more information)
+A new version comming soon! (check the [branch 2.0](https://github.com/turkishviking/Python-Robocode/tree/v2.0) in beta for more information)
 
 ####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
 
@@ -30,9 +30,8 @@ A new version comming soon! (check the branch 2.0 in beta for more information)
     - [ ]  Batlles Statistics
     - [ ]  .exe
     - [ ]  .deb
-    - [ ]  Qt integration
     - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)
-<div> bla </div>
+
 
 * ######Thanks to the original developers:
     
