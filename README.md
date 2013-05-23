@@ -11,7 +11,7 @@
 
 * ######What's New & Task list:
 
-    - <font color=#96CA2D>[x]  getTargetPosition()</font>
+    - <font color=#96CA2D>    [x]  getTargetPosition()     </font>
     - [x]  getTargetName()
     - [x]  bulletPower
     - [x]  on_hit_by_bullet()
