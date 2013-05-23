@@ -3,14 +3,14 @@
  
 
 
-#### A Fork of Robocode for python programming
+### A Fork of Robocode for python programming
 
 I found this project on http://sourceforge.net/p/pythonrobocode/
-I didn't seen any commit since 2012 so I have decided to develop it. Any help is welcome!
+I didn't seen any commit since 2012 so I have decided to develop it. Any help would be welcome!
 
-#####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
 
-* Thanks to the original developers:
+* ######Thanks to the original developers:
     
   * Michael Macdonald
   * Neil Morrison
@@ -20,7 +20,7 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
   * Stuart Glendinning
     
     
-* What's New & Task list:
+* ######What's New & Task list:
     - [x]  getTargetPosition()
     - [x]  getTargetName()
     - [x]  bulletPower
@@ -34,7 +34,7 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help is
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
     
-* Bot example (charlie_lutaud.py):
+* ######Bot example (charlie_lutaud.py):
 
 ```python 
 # -*- coding: utf-8 -*-
