@@ -4,12 +4,10 @@
 
 
 ### A Fork of Robocode for python programming
+ 
+#####Any help would be welcome!
 
-I found this project on [sourceforge](http://sourceforge.net/p/pythonrobocode/)
-I didn't seen any commit since 2012, so I have decided to develop it. 
-Any help would be welcome!
-
-####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+####This is a beta version, if you aren't a developer, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
 
 
 * ######What's New & Task list:
@@ -29,16 +27,9 @@ Any help would be welcome!
     - [ ]  .exe
     - [ ]  .deb
     - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)
+    - [ ]  masked mode without screen (top speed without bliting) (need battle Series and statistic first)
 
 
-* ######Thanks to the original developers:
-    
-  * Michael Macdonald
-  * Neil Morrison
-  * Maksat Tulepov
-  * Tim Storer
-  * Andrew Downs
-  * Stuart Glendinning
 
   
 
