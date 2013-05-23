@@ -1,4 +1,4 @@
-![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robot.png?raw=true "Python-Robocode") Python-Robocode
+![alt text](https://github.com/turkishviking/Python-Robocode/blob/master/Python-Robocode/robotImages/robotTitre.png?raw=true "Python-Robocode")
 ===============
  
 
@@ -9,7 +9,7 @@ I found this project on http://sourceforge.net/p/pythonrobocode/
 I didn't seen any commit since 2012 so I have decided to develop it. Any help would be welcome!
 
 ####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
-```
+
 * ######Thanks to the original developers:
     
   * Michael Macdonald
@@ -18,8 +18,8 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help wo
   * Tim Storer
   * Andrew Downs
   * Stuart Glendinning
-```    
-```    
+
+  
 * ######What's New & Task list:
     - [x]  getTargetPosition()
     - [x]  getTargetName()
@@ -33,7 +33,6 @@ I didn't seen any commit since 2012 so I have decided to develop it. Any help wo
     - [x]  on_Robot_Exit()
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
-```
 
 
 * ######Bot example (charlie_lutaud.py):
