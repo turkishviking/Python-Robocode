@@ -4,7 +4,7 @@ sys.path.append(sys.path[0] + "/../robots")
 robotName = "Charlie_Robot"
 
 #shutil.copyfile(src, dst)
-import Charlie_RobotTEST
+
 
 #import libraries
 import sys,random, string, math

@@ -2,9 +2,9 @@ import pygame, sys, copy, pickle
 from Classes import *
 sys.path.append(sys.path[0] + "/robots")
 
-import Charlie_Lutaud, Charlie_Robot
+import Charlie_Robot, MaxPayne, Andrew_Cassius
 
-robotmodules = [Charlie_Lutaud, Charlie_Robot]
+robotmodules = [Charlie_Robot, MaxPayne, Andrew_Cassius]
 
 
 

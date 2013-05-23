@@ -1,4 +1,4 @@
-import Tester as gamefile
+import gamefile
 def name():
         return "MaxPayne"
 def colour():
