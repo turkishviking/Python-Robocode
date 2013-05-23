@@ -12,6 +12,7 @@
 * ######What's New & Task list:
 <ul>
     <li><font color="darkgreen">    [x]  getTargetPosition()                                                                                              </font></li>
+</ul>
     - <font color="darkgreen">    [x]  getTargetName()                                                                                                  </font>
     - <font color="darkgreen">    [x]  bulletPower                                                                                                      </font>
     - <font color="darkgreen">    [x]  on_hit_by_bullet()                                                                                               </font>
