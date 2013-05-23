@@ -6,7 +6,8 @@
 ### A Fork of Robocode for python programming
 
 I found this project on [sourceforge](http://sourceforge.net/p/pythonrobocode/)
-I didn't seen any commit since 2012, so I have decided to develop it. Any help would be welcome!
+I didn't seen any commit since 2012, so I have decided to develop it. 
+Any help would be welcome!
 
 ####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
 
@@ -25,6 +26,10 @@ I didn't seen any commit since 2012, so I have decided to develop it. Any help w
     - [x]  on_Robot_Exit()
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
+    - [ ]  .exe
+    - [ ]  .deb
+    - [ ]  Qt integration
+    - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)
 
 
 * ######Thanks to the original developers:
