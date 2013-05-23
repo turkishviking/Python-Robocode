@@ -12,6 +12,8 @@ class BlastC:
     image = pygame.image.load("robotImages/blast.png")
     name = "DEFAULTOWNDERNAME"
     power = 10     
+    w = 10
+    h = 10
         
 class RobotC:
     x = 0

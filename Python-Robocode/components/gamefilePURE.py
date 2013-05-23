@@ -6,7 +6,7 @@ import %importrobotshere
 
 robotmodules = %putrobotnameshere
 
-
+RATIO = (len(robotmodules)-1)
 
 
 
@@ -15,6 +15,8 @@ import sys, pygame,random, string, math
 
 #initiate the pygame library
 pygame.init()
+clock = pygame.time.Clock()
+
 #top,left,bottom,right
 battleboundary = top,left,bottom,right = 51,0,466,556
 
@@ -37,7 +39,7 @@ def ScreenSetUp(ArenaName):
     Arena = "arenas/" + ArenaName+"/"
     #Set up the screen
     size = width, height = 700, 500 #Set the size as a tuple with width and height
-    screen = pygame.display.set_mode(size) #Sets the screen display size
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE) #Sets the screen display size
     pygame.display.set_caption('Robocode: A-Team') #Sets window Title
     pygame.display.flip()     #Refreshes Screen
     Menu(screen,width,height,Arena) #Sample function Call
@@ -164,8 +166,11 @@ def THISfire(robot, powB):
     blast = BlastC()
     blast.x = bx
     blast.y = by
-    blast.movex = bmovex*3
-    blast.movey = bmovey*3
+    blast.movex = bmovex*3/RATIO
+    blast.movey = bmovey*3/RATIO
+    blast.w = blast.image.get_width()/RATIO
+    blast.h = blast.image.get_height()/RATIO
+    blast.image = pygame.transform.scale(blast.image, (blast.w, blast.h))
     blast.robot = robot
     #blast.power = robot.shotPower
     if powB > 10:
@@ -199,8 +204,8 @@ def turn(change,robot,deg):
             robot.currDirec = robot.currDirec - 1
         
         
-    robot.movex = math.sin(-math.radians(robot.currDirec))
-    robot.movey = math.cos(-math.radians(robot.currDirec))
+    robot.movex = math.sin(-math.radians(robot.currDirec))/RATIO #for speed 
+    robot.movey = math.cos(-math.radians(robot.currDirec))/RATIO
 
 def THISmove(change,robot,distance, Robots):
     if (change == True):
@@ -258,7 +263,7 @@ def blastCheck(robot,Blasts):
         #the first part of this if statement is to make sure that robots own blasts don't hurt them.
         #second is to check if the blast is within the rect of the robot
         if (not(blast.name.endswith(robot.name))):
-            if (((blast.x) > robot.x) and (blast.x+10 < robot.x+50) and ((blast.y) >robot.y and (blast.y+10 < robot.y+50))):
+            if (((blast.x) > robot.x) and (blast.x+blast.w < robot.x+robot.w) and ((blast.y) >robot.y and (blast.y+blast.h < robot.y+robot.h))):
                 #decrease health
                     robot.health = robot.health - blast.power
                     if blast.robot.health + blast.power < 82:
@@ -457,22 +462,31 @@ def Menu(screen,width,height,Arena):
 	changedColor.replace((0,255,255),colourChooser,0.02,(0.299,0.587,0.114))
 	
 	robot.BASEimage = base = changedColor.make_surface()
-	
-	
-	
-	#-------------------------------------------------------------------------------test--------------------------------------------------------------------------------------------------
-	#robot.BASEimage = base = pygame.transform.scale(base, (10,10))
-	#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	
-	
-	
-	
+	#scaling
+        robot.w = robot.BASEimage.get_width()/RATIO
+        robot.h = robot.BASEimage.get_height()/RATIO
+        base = pygame.transform.scale(robot.BASEimage.copy(), (robot.w, robot.h))
+        robot.BASEimage = base
         robot.BASErect = base.get_rect()
         
         robot.GUNimage = gun = pygame.image.load(imageStore[1])
+        
+        #scaling
+        robot.gw = robot.GUNimage.get_width()/RATIO
+        robot.gh = robot.GUNimage.get_height()/RATIO
+        gun = pygame.transform.scale(robot.GUNimage.copy(), (robot.gw, robot.gh))
+        robot.GUNimage = gun
         robot.GUNrect = gun.get_rect()
+        
         robot.RADARimage = radar = pygame.image.load(imageStore[2])
+        
+        #scaling
+        robot.rw = robot.RADARimage.get_width()/RATIO
+        robot.rh = robot.RADARimage.get_height()/RATIO
+        radar = pygame.transform.scale(robot.RADARimage.copy(), (robot.rw, robot.rh))
+        robot.RADARimage = radar 
         robot.RADARrect = radar.get_rect()
+        
 	changedColor = pygame.PixelArray(gun)
 	changedColor.replace((0,255,255),colourChooser,0.02,(0.299,0.587,0.114))
 	robot.GUNimage = changedColor.make_surface()
@@ -533,7 +547,7 @@ def Menu(screen,width,height,Arena):
     while 1 :
         #Pygame.event.get() takes in input from the user
         #It records keyboard input and mouse clicks on the window
-        
+        clock.tick(600)
         for event in pygame.event.get():
             #If the user hits the X button on the window
             if event.type == pygame.QUIT:
@@ -546,13 +560,14 @@ def Menu(screen,width,height,Arena):
         #counter is the value of the robot (i.e robot 0 has a counter value of 0)
         counter = 0
 
-        pygame.time.wait(1)
+        #pygame.time.wait(1)
 
-
+        
         for deadRobot in DeadRobots:
             screen.blit(deadRobot.image,(deadRobot.x,deadRobot.y))
             #Sidebar Graphics
             #Image
+            
             screen.blit(deadRobot.smallImage,(560,(466-37-(37*counter))))
 
             #Name
@@ -580,7 +595,7 @@ def Menu(screen,width,height,Arena):
             else:
                 blast.x = blast.x + blast.movex
                 blast.y = blast.y + blast.movey
-                screen.blit(blast.image,(blast.x-5,blast.y-5))
+                screen.blit(blast.image,(blast.x-5/RATIO,blast.y-5/RATIO))
         
         
         for robot in Robots:
@@ -606,9 +621,6 @@ def Menu(screen,width,height,Arena):
                 blastCheck(currentRobot,Blasts)
 
 
-                
-
-
                 #add one to the frames since last damage
                 robot.frameSinceDam = robot.frameSinceDam+1
                 robot.ticksSinceShot = robot.ticksSinceShot+1
@@ -632,7 +644,7 @@ def Menu(screen,width,height,Arena):
                 if (robot.frameSinceDam > 7): #this changes the base image to one that looks like it's flashing for 8 frames after the robot is hit
                     image = robot.imageStore[1]
                 else:
-                    image = pygame.image.load("robotImages/baseFlash.png")
+                    image = pygame.transform.scale(pygame.image.load("robotImages/baseFlash.png"), (robot.rw, robot.rh)) 
                 
                 robot.BASEimage = pygame.transform.rotate(image,(-robot.currDirec))
                 rotated_rect = robot.BASEimage.get_rect()
@@ -660,7 +672,7 @@ def Menu(screen,width,height,Arena):
                 except ValueError:
                     #DO BUGGER ALL :D
                     nut = 3
-                screen.blit(robot.GUNimage,(robot.x-15, robot.y-15))
+                screen.blit(robot.GUNimage,(robot.x-15/RATIO, robot.y-15/RATIO))
 
                 ################################################################
                 ################################################ FOR THE RADAR  
@@ -730,10 +742,6 @@ def Menu(screen,width,height,Arena):
                         DeadRobots.insert(0,deadRobot)
                         GameOver(DeadRobots)
                 
-                                      
-                                      
-
-                
 
                 robot.frameSinceDam = robot.frameSinceDam + 1
  
@@ -749,12 +757,7 @@ def Menu(screen,width,height,Arena):
                     nut = 3
                 screen.blit(robot.BASEimage,(robot.x, robot.y))
 
-                    
-                
-        
-                
 
-            
 
             if robot.health<=0: #If robot has no health it's dead
                 robot.alive = False
@@ -788,11 +791,6 @@ def Menu(screen,width,height,Arena):
             screen.blit(separator,(565,(84+(37*counter))))
             counter = counter+1
 
-               
-
-            
-            
-            
             
         pygame.display.flip()
 

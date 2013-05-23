@@ -59,7 +59,7 @@ def target_spotted(direction, targetBotName, targetX, targetY):
     
 def on_hit_by_bullet(blastPower, blastName):
     """when my bot is hit by a bullet"""
-    print blastPower, blastName
+    """print blastPower, blastName"""
     
     
     

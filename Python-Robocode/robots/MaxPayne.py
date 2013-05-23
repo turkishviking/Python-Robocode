@@ -25,4 +25,4 @@ def target_spotted(direction, targetBotName, targetX, targetY):
 	gamefile.fire(2)
 
 def on_hit_by_bullet(blastPower, blastName):
-    print blastPower, blastName
+    """print blastPower, blastName"""
