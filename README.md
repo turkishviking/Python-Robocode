@@ -9,7 +9,7 @@
 
 #####Any help would be welcome!
 
-* ######What's New & Task list:
+######What's New & Task list:
 <ul>
     <li><font color="darkgreen">    [x]  getTargetPosition()                                                                                              </font></li>
 </ul>
