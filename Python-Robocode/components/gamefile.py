@@ -2,9 +2,9 @@ import pygame, sys, copy, pickle
 from Classes import *
 sys.path.append(sys.path[0] + "/robots")
 
-import Charlie_Robot, MaxPayne, Andrew_Cassius
+import Charlie_Robot, MaxPayne
 
-robotmodules = [Charlie_Robot, MaxPayne, Andrew_Cassius]
+robotmodules = [Charlie_Robot, MaxPayne]
 
 
 
@@ -37,7 +37,7 @@ def ScreenSetUp(ArenaName):
     Arena = "arenas/" + ArenaName+"/"
     #Set up the screen
     size = width, height = 700, 500 #Set the size as a tuple with width and height
-    screen = pygame.display.set_mode(size) #Sets the screen display size
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE) #Sets the screen display size
     pygame.display.set_caption('Robocode: A-Team') #Sets window Title
     pygame.display.flip()     #Refreshes Screen
     Menu(screen,width,height,Arena) #Sample function Call

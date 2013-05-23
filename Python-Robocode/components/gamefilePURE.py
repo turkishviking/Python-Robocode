@@ -37,7 +37,7 @@ def ScreenSetUp(ArenaName):
     Arena = "arenas/" + ArenaName+"/"
     #Set up the screen
     size = width, height = 700, 500 #Set the size as a tuple with width and height
-    screen = pygame.display.set_mode(size) #Sets the screen display size
+    screen = pygame.display.set_mode(size, pygame.RESIZABLE) #Sets the screen display size
     pygame.display.set_caption('Robocode: A-Team') #Sets window Title
     pygame.display.flip()     #Refreshes Screen
     Menu(screen,width,height,Arena) #Sample function Call
