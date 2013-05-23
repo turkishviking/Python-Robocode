@@ -4,15 +4,14 @@
 
 
 ### A Fork of Robocode for python programming
- 
-#####Any help would be welcome!
 
 ####This is a beta version, if you aren't a developer, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
 
+#####Any help would be welcome!
 
 * ######What's New & Task list:
 
-    - [x]  getTargetPosition()
+    - <font color=#96CA2D>[x]  getTargetPosition()</font>
     - [x]  getTargetName()
     - [x]  bulletPower
     - [x]  on_hit_by_bullet()
@@ -28,6 +27,9 @@
     - [ ]  .deb
     - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)
     - [ ]  masked mode without screen (top speed without bliting) (need battle Series and statistic first)
+    - [x]  Physics is proportional to the map size
+    - [ ]  Add Classe Reference in the wiki
+    - [ ]  To prevent bot's to use Sockets, urllib2, and Sub/Multi Processing Module (more safe for users)
 
 
 
