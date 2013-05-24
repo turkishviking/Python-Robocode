@@ -19,7 +19,7 @@
     - [ ]  WallCollision
     - [x]  MapSize --->  The map is proportional to the number of bots
     - [x]  Number_Of_Enmies_Left()
-    - [ ]  GameSpeed
+    - [ ]  GameSpeed  ---> Physics OK, have to implement a graphic slide bar
     - [x]  on_Robot_Exit()
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
@@ -30,6 +30,7 @@
     - [x]  Physics is proportional to the map size
     - [ ]  Add Classe Reference in the wiki
     - [ ]  To prevent bot's to use Sockets, urllib2, and Sub/Multi Processing Module (more safe for users)
+    - [ ]  Window resizable (need to split the code in more file to clarify it).
 
 
 

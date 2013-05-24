@@ -6,7 +6,7 @@ import %importrobotshere
 
 robotmodules = %putrobotnameshere
 
-RATIO = (len(robotmodules)-1)
+RATIO = (len(robotmodules))/2.0
 
 
 
@@ -168,8 +168,8 @@ def THISfire(robot, powB):
     blast.y = by
     blast.movex = bmovex*3/RATIO
     blast.movey = bmovey*3/RATIO
-    blast.w = blast.image.get_width()/RATIO
-    blast.h = blast.image.get_height()/RATIO
+    blast.w = int(blast.image.get_width()/RATIO)
+    blast.h = int(blast.image.get_height()/RATIO)
     blast.image = pygame.transform.scale(blast.image, (blast.w, blast.h))
     blast.robot = robot
     #blast.power = robot.shotPower
@@ -401,6 +401,7 @@ def Menu(screen,width,height,Arena):
         
     	menuimage = pygame.image.load("menuImages/GameOver.jpg") #Load in an image
         overlay = pygame.image.load("menuImages/GameOverOptions.png") #Load in an image
+        
     	screen.blit(menuimage,(0,0)) #Place your image
     	screen.blit(overlay,(0,0)) #Place your image
     	pygame.display.flip()     #Refreshes Screen
@@ -463,8 +464,8 @@ def Menu(screen,width,height,Arena):
 	
 	robot.BASEimage = base = changedColor.make_surface()
 	#scaling
-        robot.w = robot.BASEimage.get_width()/RATIO
-        robot.h = robot.BASEimage.get_height()/RATIO
+        robot.w = int(robot.BASEimage.get_width()/RATIO)
+        robot.h = int(robot.BASEimage.get_height()/RATIO)
         base = pygame.transform.scale(robot.BASEimage.copy(), (robot.w, robot.h))
         robot.BASEimage = base
         robot.BASErect = base.get_rect()
@@ -472,8 +473,8 @@ def Menu(screen,width,height,Arena):
         robot.GUNimage = gun = pygame.image.load(imageStore[1])
         
         #scaling
-        robot.gw = robot.GUNimage.get_width()/RATIO
-        robot.gh = robot.GUNimage.get_height()/RATIO
+        robot.gw = int(robot.GUNimage.get_width()/RATIO)
+        robot.gh = int(robot.GUNimage.get_height()/RATIO)
         gun = pygame.transform.scale(robot.GUNimage.copy(), (robot.gw, robot.gh))
         robot.GUNimage = gun
         robot.GUNrect = gun.get_rect()
@@ -481,8 +482,8 @@ def Menu(screen,width,height,Arena):
         robot.RADARimage = radar = pygame.image.load(imageStore[2])
         
         #scaling
-        robot.rw = robot.RADARimage.get_width()/RATIO
-        robot.rh = robot.RADARimage.get_height()/RATIO
+        robot.rw = int(robot.RADARimage.get_width()/RATIO)
+        robot.rh = int(robot.RADARimage.get_height()/RATIO)
         radar = pygame.transform.scale(robot.RADARimage.copy(), (robot.rw, robot.rh))
         robot.RADARimage = radar 
         robot.RADARrect = radar.get_rect()
@@ -542,7 +543,8 @@ def Menu(screen,width,height,Arena):
         lowrange = highrange + 40
         highrange = lowrange + step
        
-
+    bolBlit = True
+    blitCount = 0
     #An infinite loop is the base of a python game
     while 1 :
         #Pygame.event.get() takes in input from the user
@@ -552,8 +554,8 @@ def Menu(screen,width,height,Arena):
             #If the user hits the X button on the window
             if event.type == pygame.QUIT:
                 Exit(screen)
-                
-        screen.blit(menuimage,(0,0))
+        if bolBlit:      
+            screen.blit(menuimage,(0,0))
 
         
             
@@ -564,21 +566,23 @@ def Menu(screen,width,height,Arena):
 
         
         for deadRobot in DeadRobots:
-            screen.blit(deadRobot.image,(deadRobot.x,deadRobot.y))
+            if bolBlit:
+                screen.blit(deadRobot.image,(deadRobot.x,deadRobot.y))
             #Sidebar Graphics
             #Image
             
-            screen.blit(deadRobot.smallImage,(560,(466-37-(37*counter))))
+                screen.blit(deadRobot.smallImage,(560,(466-37-(37*counter))))
 
             #Name
             robotName = pygame.font.NameFont.render(str(deadRobot.name), True, ArenaFontColor)
-            screen.blit(robotName,(602,(466-37-(37*counter))))
+            if bolBlit:
+                screen.blit(robotName,(602,(466-37-(37*counter))))
 
-            #Health Bar  - Colors are RGB values
-            screen.blit(healthBarBG,(602,(466-20-(37*counter))))
+                #Health Bar  - Colors are RGB values
+                screen.blit(healthBarBG,(602,(466-20-(37*counter))))
                 
-            #Separator
-            screen.blit(separator,(565,(466-37-(37*counter))))
+                #Separator
+                screen.blit(separator,(565,(466-37-(37*counter))))
             counter = counter+1
             
         counter = 0
@@ -595,7 +599,8 @@ def Menu(screen,width,height,Arena):
             else:
                 blast.x = blast.x + blast.movex
                 blast.y = blast.y + blast.movey
-                screen.blit(blast.image,(blast.x-5/RATIO,blast.y-5/RATIO))
+                if bolBlit:
+                    screen.blit(blast.image,(blast.x-5/RATIO,blast.y-5/RATIO))
         
         
         for robot in Robots:
@@ -655,7 +660,8 @@ def Menu(screen,width,height,Arena):
                 except:
                     #DO BUGGER ALL :D
                     nut = 3
-                screen.blit(robot.BASEimage,(robot.x, robot.y))
+                if bolBlit:
+                    screen.blit(robot.BASEimage,(robot.x, robot.y))
                 ###############################################################
                 ################################################ FOR THE GUN
                 if robot.GUNcurrDirec == 360:
@@ -672,7 +678,8 @@ def Menu(screen,width,height,Arena):
                 except ValueError:
                     #DO BUGGER ALL :D
                     nut = 3
-                screen.blit(robot.GUNimage,(robot.x-15/RATIO, robot.y-15/RATIO))
+                if bolBlit:
+                    screen.blit(robot.GUNimage,(robot.x-15/RATIO, robot.y-15/RATIO))
 
                 ################################################################
                 ################################################ FOR THE RADAR  
@@ -687,7 +694,8 @@ def Menu(screen,width,height,Arena):
                     #DO BUGGER ALL :D
                     
                     nut = 3
-                screen.blit(robot.RADARimage,(robot.x,robot.y))
+                if bolBlit:
+                    screen.blit(robot.RADARimage,(robot.x,robot.y))
 
 
             else:
@@ -755,7 +763,8 @@ def Menu(screen,width,height,Arena):
                 except:
                     #DO BUGGER ALL :D
                     nut = 3
-                screen.blit(robot.BASEimage,(robot.x, robot.y))
+                if bolBlit:
+                    screen.blit(robot.BASEimage,(robot.x, robot.y))
 
 
 
@@ -764,14 +773,16 @@ def Menu(screen,width,height,Arena):
 
             #Sidebar Graphics
             #Image
-            screen.blit(robot.smallImage,(560,(53+(37*counter))))
+            if bolBlit:
+                screen.blit(robot.smallImage,(560,(53+(37*counter))))
 
             #Name
             robotName = pygame.font.NameFont.render(str(robot.name), True, ArenaFontColor)
-            screen.blit(robotName,(602,(54+(37*counter))))
+            if bolBlit:
+                screen.blit(robotName,(602,(54+(37*counter))))
 
-            #Health Bar  - Colors are RGB values
-            screen.blit(healthBarBG,(602,(69+(37*counter))))
+                #Health Bar  - Colors are RGB values
+                screen.blit(healthBarBG,(602,(69+(37*counter))))
             invHealth = robot.maxhealth-robot.health
             if robot.alive: #If Robot is alive then deal with it's health bar
                 healthColour = (invHealth*11,255,0) # Green to Yellow
@@ -788,9 +799,16 @@ def Menu(screen,width,height,Arena):
                 pygame.draw.rect(screen, healthColour,(603,(70+(37*counter)),robot.health,6))
                 
             #Separator
-            screen.blit(separator,(565,(84+(37*counter))))
+            if bolBlit:
+                screen.blit(separator,(565,(84+(37*counter))))
             counter = counter+1
 
+        if blitCount == 20:
+            bolBlit = True
+            blitCount = 0
+        else:
+            blitCount += 1
+            bolBlit = False
             
         pygame.display.flip()
 
