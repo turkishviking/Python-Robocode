@@ -5,44 +5,39 @@
 
 ### A Fork of Robocode for python programming
 
-I found this project on [sourceforge](http://sourceforge.net/p/pythonrobocode/)
-I didn't seen any commit since 2012, so I have decided to develop it. 
-Any help would be welcome!
+#### This is the new and maintained version developed with PyQt
 
-A new version is comming soon! (check the [branch 2.0](https://github.com/turkishviking/Python-Robocode/tree/v2.0) in beta for more information)
+####Any help would be welcome!
 
-####Need help to start? watch the [python-robocode wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+#####This is a beta version, if you aren't a developer, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
+
+
 
 
 * ######What's New & Task list:
 
-    - [x]  getTargetPosition()
-    - [x]  getTargetName()
+    - [x]  move()
+    - [x]  turn()
+    - [ ]  gunTurn()
+    - [ ]  radarTurn()
+    - [ ]  radatDetection()
+    - [ ]  getTargetPosition()
+    - [ ]  getTargetName()
     - [x]  bulletPower
-    - [x]  on_hit_by_bullet()
-    - [ ]  bulletSize
-    - [ ]  WallCollision
-    - [ ]  MapSize
-    - [x]  Number_Of_Enmies_Left()
-    - [ ]  GameSpeed
-    - [x]  on_Robot_Exit()
+    - [x]  on_hit_by_bullet()  -->   Detected but not effective
+    - [x]  bulletSize
+    - [x]  WallCollision       -->   Detected but not effective
+    - [x]  MapSize
+    - [ ]  Number_Of_Enmies_Left()
+    - [x]  GameSpeed
+    - [ ]  on_Robot_Exit()
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
     - [ ]  .exe
     - [ ]  .deb
-    - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)
-
-
-* ######Thanks to the original developers:
-    
-  * Michael Macdonald
-  * Neil Morrison
-  * Maksat Tulepov
-  * Tim Storer
-  * Andrew Downs
-  * Stuart Glendinning
-
-  
-
-
+    - [x]  Qt Integration
+    - [ ]  Qt IDE (syntax highlighter, auto completion, Base Robot)    --> Not Done but I have an old project of IDE to do it
+    - [ ]  Add Classe Reference in the wiki
+    - [ ]  To prevent bot's to use Sockets, urllib2, and Sub/Multi Processing Module (more safe for users)
+    - [x]  Window resizable 
 

@@ -1,4 +1,5 @@
 *.pyc
 *.directory
-Charlie_Robot.py
-Charlie
+*.eric4project
+*~
+*.e4p
