@@ -5,9 +5,14 @@
 
 ### A Fork of Robocode for python programming
 
-####This is a beta version, if you aren't a developer, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
+####This version won't be maintain because of a PyQt integration instead of pygame (much more faster), Watch the [PyQt branch](https://github.com/turkishviking/Python-Robocode/tree/PyQt-Robocode) for the new version
 
-#####Any help would be welcome!
+####Any help would be welcome!
+
+
+##### If you aren't devleoper, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
+
+
 
 * ######What's New & Task list:
 
