@@ -5,6 +5,7 @@ from PyQt4.QtGui import QGraphicsScene,  QWidget,  QCursor, QMouseEvent,  QBrush
 from PyQt4.QtCore import SIGNAL,  QPointF
 from PyQt4 import QtCore,  Qt
 from robot import Robot
+from wall import Wall
 import time,  os,  random
 
 class Graph(QGraphicsScene):
@@ -65,11 +66,13 @@ class Graph(QGraphicsScene):
         brush.setTexture(pix)
         brush.setStyle(24)
         left.setBrush(brush)
+        left.name = 'left'
         self.addItem(left)
         #right
         right = QGraphicsRectItem()
         right.setRect(self.width - pix.width(), 0, pix.width(), self.height)
         right.setBrush(brush)
+        right.name = 'right'
         self.addItem(right)
         #top
         top = QGraphicsRectItem()
@@ -78,11 +81,13 @@ class Graph(QGraphicsScene):
         brush.setTexture(pix)
         brush.setStyle(24)
         top.setBrush(brush)
+        top.name = 'top'
         self.addItem(top)
         #bottom
         bottom = QGraphicsRectItem()
         bottom.setRect(0 ,self.height - pix.height() , self.width, pix.height())
         bottom.setBrush(brush)
+        bottom.name = 'bottom'
         self.addItem(bottom)
         
         

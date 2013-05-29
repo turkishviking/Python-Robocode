@@ -19,7 +19,9 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.mapSize = mapSize
         self.physics = physics()
         self.parent = parent
+        self.health = 100
         
+        #graphics
         self.maskColor = QtGui.QColor(0, 255, 255)
         self.gunMaskColor = QtGui.QColor(0, 255, 255)
         self.radarMaskColor = QtGui.QColor(0, 255, 255)
@@ -74,14 +76,18 @@ class Robot(QtGui.QGraphicsItemGroup):
         y = self.radarHeight /2
         self.radar.setTransformOriginPoint(x, y)
         
+        #add self items in items to avoid collisions
         self.items = set([self, self.base, self.gun, self.radar])
         
+        #init the subclassed Bot
         self.init()
         
         self.currentAnimation = []
         
     def advance(self, i):
-
+        if self.health <= 0:
+            self.parent.removeItem(self)
+            #self.onRobotDeath()
         if i == 1:
             
             if self.physics.animationList == []:
@@ -110,16 +116,20 @@ class Robot(QtGui.QGraphicsItemGroup):
             except:
                 pass
             
-
-        """
+        else: #sensor
+            
+            self.sensors()
+            
+        #collisions
         for item in set(self.base.collidingItems(1)) - self.items:
             if isinstance(item, QtGui.QGraphicsRectItem):
-                print "aille le mur"
+                #wall Collision
+                self.wallRebound(item)
             elif isinstance(item, Robot):
-                print 'aille le robot'
+                #robot Collision
+                self.robotRebound(item)
             elif isinstance(item, Bullet):
-                print 'aille le bullet'
-        """
+                self.bulletRebound(item)
         
      ### THESE ARE THE FUNCTIONS ACCESSABLE FROM OUTSIDE ###   
      
@@ -196,7 +206,6 @@ class Robot(QtGui.QGraphicsItemGroup):
         
         pos = self.pos()
         angle = self.gun.rotation()
-        print angle
         #to find the initial position
         x = pos.x() + self.baseWidth/2.0
         y = pos.y() + self.baseHeight/2.0
@@ -222,8 +231,18 @@ class Robot(QtGui.QGraphicsItemGroup):
     def getMapSize(self):
         return self.mapSize
             
+    def getPosition(self):
+        p = self.pos()
+        r = self.boundingRect()
+        return QtCore.QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
+        
+    def reset(self):
+        self.physics.reset()
+        
+        
     ###end of functions accessable from robot###
             
+    # Calculus
     def getTranslation(self, step):
         angle = self.base.rotation()
         pos = self.pos()
@@ -242,3 +261,46 @@ class Robot(QtGui.QGraphicsItemGroup):
     def getRadarRotation(self,  alpha):
         return self.radar.rotation() + alpha
     
+    def wallRebound(self, item):
+        self.reset()
+        if item.name == 'left':
+            x = self.physics.step*1.1
+            y = 0
+        elif item.name == 'right':
+            x = - self.physics.step*1.1
+            y = 0
+        elif item.name == 'top':
+            x = 0
+            y = self.physics.step*1.1
+        elif item.name == 'bottom':
+            x = 0
+            y = - self.physics.step*1.1
+        self.setPos(self.pos().x() + x, self.pos().y() + y)
+        self.health -= 1
+        
+    def robotRebound(self, robot):
+        self.reset()
+        robot.reset()
+        angle = self.base.rotation()
+        pos = self.pos()
+        x = pos.x()
+        y = pos.y()
+        dx = - math.sin(math.radians(angle))*self.physics.step*1.1
+        dy = math.cos(math.radians(angle))*self.physics.step*1.1
+        self.setPos(x-dx, y-dy)
+        pos = robot.pos()
+        x = pos.x()
+        y = pos.y()
+        robot.setPos(x+dx, y+dy)
+        robot.health -= 1
+        self.health -= 1
+        
+    def bulletRebound(self, bullet):
+        self.health -= bullet.power
+        bullet.robot.health += bullet.power
+        #onHitByBullet()
+        #bullet.robot.onBulletHit()
+        self.parent.removeItem(bullet)
+        print self.health
+        
+        

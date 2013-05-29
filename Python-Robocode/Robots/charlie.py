@@ -42,5 +42,9 @@ class Charlie(Robot): #Create a Robot
         self.radarTurn(180)
         self.stop()
         
+    def sensors(self):  #NECESARY FOR THE GAME
+        """Tick each frame to have datas about the game"""
         
+        pos = self.getPosition() #return the center of the bot
+        #print pos.x(),  pos.y() 
        

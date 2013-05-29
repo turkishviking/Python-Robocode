@@ -29,4 +29,5 @@ class Charlier(Robot): #Create a Robot
         self.stop()
         #self.setGunDirection(40) # set the Gun direction (bottom = 0°)
 
-        
+    def sensors(self): #NECESARY FOR THE GAME
+        pass

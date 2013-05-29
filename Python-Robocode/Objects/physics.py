@@ -47,9 +47,11 @@ class physics():
                 r = 0
             self.animation.append({"move": m, "turn": t, "gunTurn":g, "radarTurn":r})
 
-            
     def clearAnimation(self):
         self.move = []
         self.turn = []
         self.animation = []
           
+    def reset(self):
+        self.clearAnimation()
+        self.animationList = []
