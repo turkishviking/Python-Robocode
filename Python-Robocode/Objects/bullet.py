@@ -59,6 +59,7 @@ class Bullet(QGraphicsPixmapItem):
         dy = math.cos(math.radians(self.angle))*10.0
         self.setPos(x+dx, y+dy)
         if x < 0 or y < 0 or x > self.scene.width or y > self.scene.height:
+            self.robot.onBulletMiss(id(self))
             self.scene.removeItem(self)
             self.robot.items.remove(self)
 

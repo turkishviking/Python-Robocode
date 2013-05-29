@@ -27,7 +27,20 @@ class Charlier(Robot): #Create a Robot
         self.turn(90) #for turning (negative values turn counter-clockwise)
         self.move(90)
         self.stop()
+        self.fire(10)
+        self.move(50)
         #self.setGunDirection(40) # set the Gun direction (bottom = 0°)
 
     def sensors(self): #NECESARY FOR THE GAME
         pass
+
+    def onHitByBullet(self, bulletBotId, bulletPower): #NECESARY FOR THE GAME
+        print "hit by ", bulletBotId, "with power:", bulletPower
+        
+    def onBulletHit(self, botId, bulletId):
+        print "fire done on ",  botId
+        
+    def onBulletMiss(self, bulletId):#NECESARY FOR THE GAME
+        """when my bullet hit a wall"""
+        print "the bullet ",  bulletId, "fail"
+        

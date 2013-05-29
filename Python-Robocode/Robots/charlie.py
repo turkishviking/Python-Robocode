@@ -5,7 +5,7 @@ from robot import Robot #Import a base Robot
 
 class Charlie(Robot): #Create a Robot
     
-    def init(self):    #To initialyse your robot
+    def init(self):# NECESARY FOR THE GAME   To initialyse your robot
         
         
         #Set the bot color in RGB
@@ -18,7 +18,7 @@ class Charlie(Robot): #Create a Robot
         size = self.getMapSize()
         
     
-    def run(self): #main loop to command the bot
+    def run(self): #NECESARY FOR THE GAME  main loop to command the bot
         
         
         #self.move(90) # for moving (negative values go back)
@@ -29,7 +29,7 @@ class Charlie(Robot): #Create a Robot
         #self.setGunDirection(40) # set the Gun direction (bottom = 0°)
         
         self.fire(9.2) # To Fire (power between 1 and 10)
-        
+        bulletId = self.fire(2) #to let you you manage if the bullet hit or fail
         self.move(100)
         self.turn(50)
         self.stop()
@@ -48,3 +48,19 @@ class Charlie(Robot): #Create a Robot
         pos = self.getPosition() #return the center of the bot
         #print pos.x(),  pos.y() 
        
+    def onHitByBullet(self, bulletBotId, bulletPower): #NECESARY FOR THE GAME
+        """ When i'm hit by a bullet"""
+        print "hit by ", bulletBotId, "with power:", bulletPower
+        
+    def onBulletHit(self, botId, bulletId):#NECESARY FOR THE GAME
+        """when my bullet hit a bot"""
+        print "fire done on ",  botId
+        
+    def onBulletMiss(self, bulletId):#NECESARY FOR THE GAME
+        """when my bullet hit a wall"""
+        print "the bullet ",  bulletId, "fail"
+        
+    def onRobotDeath(self):
+        """When my bot die"""
+        print "damn I'm Dead"
+    

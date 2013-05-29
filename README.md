@@ -18,9 +18,10 @@
 
     - [x]  move()
     - [x]  turn()
-    - [ ]  gunTurn()
-    - [ ]  radarTurn()
-    - [ ]  radatDetection()
+    - [x]  gunTurn()
+    - [x]  radarTurn()
+    - [x]  getPostion
+    - [ ]  radarDetection()
     - [ ]  getTargetPosition()
     - [ ]  getTargetName()
     - [x]  bulletPower
@@ -28,9 +29,12 @@
     - [x]  bulletSize
     - [x]  WallCollision       -->   Detected but not effective
     - [x]  MapSize
-    - [ ]  Number_Of_Enmies_Left()
+    - [x]  Number_Of_Enmies_Left()
     - [x]  GameSpeed
-    - [ ]  on_Robot_Exit()
+    - [x]  on_Robot_Death()
+    - [x]  reset()             --> too stop all move at any time
+    - [x]  stop()              --> too allow to make moves sequences
+    - [ ]  RobotPrint()        --> too allow the robot to print in a textBox
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
     - [ ]  .exe

@@ -22,7 +22,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
-        
+        self.timer = QTimer()
     
     @pyqtSignature("")
     def on_pushButton_clicked(self):
@@ -33,18 +33,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             unpickler = pickle.Unpickler(file)
             dico = unpickler.load()
         file.close()
-        try:
-            self.startBattle(dico["width"] , dico["height"], dico["botList"] )
-        except Exception:
-            print Exception
+
+        self.startBattle(dico["width"] , dico["height"], dico["botList"] )
+
         
     def startBattle(self, width, height, botList):
         self.scene = Graph(self,  width,  height)
         self.graphicsView.setScene(self.scene)
         self.scene.AddRobots(botList)
-        self.timer = QTimer()
         self.connect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
-        self.timer.start((self.horizontalSlider.value()**2)/100.0)
         self.resizeEvent()
     
     @pyqtSignature("int")

@@ -26,17 +26,30 @@ class Graph(QGraphicsScene):
         
         """
         """
-        
+        self.aliveBots = []
+        self.deadBots = []
         for bot in botList:
             try:
-                robot = bot(self.sceneRect().size(), self)
+                robot = bot(self.sceneRect().size(), self, str(bot))
+                self.aliveBots.append(robot)
                 self.genPos(robot)
                 self.addItem(robot)
                 while set(robot.collidingItems()) - robot.items != set([]):
                     self.genPos(robot)
             except Exception,  e:
-                print "Problem with bot file '%s': %s" % (botFile, str(e))
+                print "Problem with bot file '%s': %s" % (bot, str(e))
+                
+        self.Parent.timer.start((self.Parent.horizontalSlider.value()**2)/100.0)
 
+    def  battleFinished(self):
+        print "battle terminated"
+        self.deadBots.append(self.aliveBots[0])
+        self.removeItem(self.aliveBots[0])
+        j = len(self.deadBots)
+        for i in range(j):
+            print "N°",  j - i , ":", self.deadBots[i]
+            
+        self.Parent.timer.stop()
 
     def genPos(self, bot):
         
