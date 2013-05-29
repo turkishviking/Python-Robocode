@@ -9,10 +9,10 @@ class Charlie(Robot): #Create a Robot
         
         
         #Set the bot color in RGB
-        self.setColour(0, 200, 100)
-        self.setGunColour(200, 200, 0)
-        self.setRadarColour(255, 60, 0)
-        self.setBulletsColor(255, 150, 150)
+        self.setColor(0, 200, 100)
+        self.setGunColor(200, 200, 0)
+        self.setRadarColor(255, 60, 0)
+        self.setBulletsColor(0, 200, 100)
         
         #get the map size
         size = self.getMapSize()
@@ -20,17 +20,27 @@ class Charlie(Robot): #Create a Robot
     
     def run(self): #main loop to command the bot
         
-        self.move(90) # for moving (negative values go back)
         
-        self.turn(90) #for turning (negative values turn counter-clockwise)
+        #self.move(90) # for moving (negative values go back)
+        #self.stop()
         
-        self.setGunDirection(90) # set the Gun direction (bottom = 0°)
+        self.turn(360) #for turning (negative values turn counter-clockwise)
+        self.stop()
+        #self.setGunDirection(40) # set the Gun direction (bottom = 0°)
         
         self.fire(9.2) # To Fire (power between 1 and 10)
-        """
+        
         self.move(100)
+        self.turn(50)
+        self.stop()
         
-        self.turn(-50)
+        self.move(180)
+        self.turn(180)
+        self.gunTurn(90)
+        self.stop()
         
-        self.setGunDirection(90)
-        """
+        self.radarTurn(180)
+        self.stop()
+        
+        
+       

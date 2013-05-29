@@ -23,8 +23,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
         
-        
-       
     
     @pyqtSignature("")
     def on_pushButton_clicked(self):
@@ -37,8 +35,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         file.close()
         try:
             self.startBattle(dico["width"] , dico["height"], dico["botList"] )
-        except:
-            pass
+        except Exception:
+            print Exception
         
     def startBattle(self, width, height, botList):
         self.scene = Graph(self,  width,  height)

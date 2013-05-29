@@ -55,9 +55,9 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.radar.setPos(x - self.radarWidth/2.0 ,  y - self.radarHeight /2.0)
         
         #Set the bot color in RGB
-        self.setColour(0, 200, 100)
-        self.setGunColour(0, 200, 100)
-        self.setRadarColour(0, 200, 100)
+        self.setColor(0, 200, 100)
+        self.setGunColor(0, 200, 100)
+        self.setRadarColor(0, 200, 100)
         self.setBulletsColor(0, 200, 100)
         
         #set the Origin point for Transformation:
@@ -73,66 +73,77 @@ class Robot(QtGui.QGraphicsItemGroup):
         x = self.radarWidth/2
         y = self.radarHeight /2
         self.radar.setTransformOriginPoint(x, y)
-        self.items = set([self.base, self.gun, self.radar])
+        
+        self.items = set([self, self.base, self.gun, self.radar])
+        
         self.init()
-        self.base.setRotation(300)
-
+        
+        self.currentAnimation = []
         
     def advance(self, i):
 
-        if not i:
-            return
-        
-        if self.physics.canMove():
-            self.run()
-            self.physics.reverse()
-        else:
+        if i == 1:
+            
+            if self.physics.animationList == []:
+                self.run()
+                self.physics.reverse()
+                
+            if self.currentAnimation == []:
+                try:
+                    self.currentAnimation  = self.physics.animationList.pop()
+                except IndexError:
+                    pass
             try:
-                dx, dy= self.getTranslation(self.physics.move.pop())
+                command = self.currentAnimation.pop() #load animation
+                #translation
+                dx, dy= self.getTranslation(command["move"])
                 self.setPos(dx, dy)
-            except:
-                pass
-            try:
-                angle = self.getRotation(self.physics.turn.pop())
+                #rotation
+                angle = self.getRotation(command["turn"])
                 self.base.setRotation(angle)
+                #gun Rotation
+                angle = self.getGunRotation(command["gunTurn"])
+                self.gun.setRotation(angle)
+                #radar Rotation
+                angle = self.getRadarRotation(command["radarTurn"])
+                self.radar.setRotation(angle)
             except:
                 pass
-        
-        for item in set(self.collidingItems(1)) - self.items:
+            
+
+        """
+        for item in set(self.base.collidingItems(1)) - self.items:
             if isinstance(item, QtGui.QGraphicsRectItem):
                 print "aille le mur"
             elif isinstance(item, Robot):
                 print 'aille le robot'
             elif isinstance(item, Bullet):
                 print 'aille le bullet'
-        
+        """
         
      ### THESE ARE THE FUNCTIONS ACCESSABLE FROM OUTSIDE ###   
      
-    def setGunDirection(self, direction):
-        self.gun.setRotation(direction)
-     
-    def fire(self, power):
-        
-        pos = self.pos()
-        angle = self.gun.rotation()
-        
-        #to find the initial position
-        x = pos.x() + self.baseWidth/2
-        y = pos.y() + self.baseHeight/2
-        dx = - math.sin(math.radians(angle))*self.gunWidth/2
-        dy = math.cos(math.radians(angle))*self.gunHeight/2
-        pos.setX(x+dx)
-        pos.setY(y+dy)
-        
-        color = self.bulletColor
-        bot = self
-        
-        bullet = Bullet(pos, color, bot, angle, power, self.parent)
-        self.items.add(bullet)
-        self.parent.addItem(bullet)
+     #-----------------------------------------------------------Gun------------------------------------------------------
+    def gunTurn(self, angle):
+        s = 1
+        if angle < 0:
+            s = -1
+        steps = s*angle/self.physics.step
+        for i in range(steps):
+            self.physics.gunTurn.append(s*self.physics.step)
          
-     
+    def setGunColor(self, r, g, b):
+        color = QtGui.QColor(r, g, b)
+        mask = self.gun.pixmap.createMaskFromColor(self.gunMaskColor,  1)
+        p = QtGui.QPainter(self.gun.pixmap)
+        p.setPen(QtGui.QColor(r, g, b))
+        p.drawPixmap(self.gun.pixmap.rect(), mask, mask.rect())
+        p.end()
+        self.gun.setPixmap(self.gun.pixmap)
+        self.gunMaskColor = QtGui.QColor(r, g, b)
+        
+    #----------------------------------------------------------Base-----------------------------------------------------
+        
     def move(self, distance):
         s = 1
         if distance < 0:
@@ -149,7 +160,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         for i in range(steps):
             self.physics.turn.append(s*self.physics.step)
             
-    def setColour(self, r, g, b):
+    def setColor(self, r, g, b):
         color = QtGui.QColor(r, g, b)
         mask = self.base.pixmap.createMaskFromColor(self.maskColor,  1)
         p = QtGui.QPainter(self.base.pixmap)
@@ -159,17 +170,17 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.base.setPixmap(self.base.pixmap)
         self.maskColor = QtGui.QColor(r, g, b)
         
-    def setGunColour(self, r, g, b):
-        color = QtGui.QColor(r, g, b)
-        mask = self.gun.pixmap.createMaskFromColor(self.gunMaskColor,  1)
-        p = QtGui.QPainter(self.gun.pixmap)
-        p.setPen(QtGui.QColor(r, g, b))
-        p.drawPixmap(self.gun.pixmap.rect(), mask, mask.rect())
-        p.end()
-        self.gun.setPixmap(self.gun.pixmap)
-        self.gunMaskColor = QtGui.QColor(r, g, b)
+    #---------------------------------------------RADAR------------------------------------------------
         
-    def setRadarColour(self, r, g, b):
+    def radarTurn(self, angle):
+        s = 1
+        if angle < 0:
+            s = -1
+        steps = s*angle/self.physics.step
+        for i in range(steps):
+            self.physics.radarTurn.append(s*self.physics.step)
+        
+    def setRadarColor(self, r, g, b):
         color = QtGui.QColor(r, g, b)
         mask = self.radar.pixmap.createMaskFromColor(self.radarMaskColor,  1)
         p = QtGui.QPainter(self.radar.pixmap)
@@ -179,8 +190,34 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.radar.setPixmap(self.radar.pixmap)
         self.radarMaskColor = QtGui.QColor(r, g, b)
         
+    #------------------------------------------------Bullets---------------------------------------
+        
+    def fire(self, power):
+        
+        pos = self.pos()
+        angle = self.gun.rotation()
+        print angle
+        #to find the initial position
+        x = pos.x() + self.baseWidth/2.0
+        y = pos.y() + self.baseHeight/2.0
+        dx =  - math.sin(math.radians(angle))*self.gunWidth/2.0
+        dy = math.cos(math.radians(angle))*self.gunHeight/2.0
+        pos.setX(x+dx)
+        pos.setY(y+dy)
+        
+        color = self.bulletColor
+        bot = self
+        
+        bullet = Bullet(pos, color, bot, angle, power, self.parent)
+        self.items.add(bullet)
+        self.parent.addItem(bullet)
+        
     def setBulletsColor(self, r, g, b):
         self.bulletColor = QtGui.QColor(r, g, b)
+        
+    #---------------------------------------General Methods---------------------------------------
+    def stop(self):
+        self.physics.newAnimation()
         
     def getMapSize(self):
         return self.mapSize
@@ -198,5 +235,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     def getRotation(self, alpha):
         return self.base.rotation() + alpha
-            
+        
+    def getGunRotation(self, alpha):
+        return self.gun.rotation() + alpha
+        
+    def getRadarRotation(self,  alpha):
+        return self.radar.rotation() + alpha
     

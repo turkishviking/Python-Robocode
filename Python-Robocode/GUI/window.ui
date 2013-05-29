@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>704</width>
-    <height>452</height>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Python Robocode</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>robotImages/smallRed.png</normaloff>robotImages/smallRed.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">

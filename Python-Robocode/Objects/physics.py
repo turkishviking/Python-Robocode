@@ -8,22 +8,48 @@ class physics():
         
         self.move = []
         self.turn = []
-        
         self.gunTurn = []
-        
         self.radarTurn = []
         
-        self.step = 5
+        self.animation = []
+        self.animationList = []
+        
+        self.step = 10
 
-    def canMove(self):
-        if self.move == [] and self.turn == []:
-            return True
-        else:
-            return False
             
     def reverse(self):
-        self.move.reverse()
-        self.turn.reverse()
-        self.gunTurn.reverse()
-        self.radarTurn.reverse()       
-                          
+        self.animationList.reverse()     
+        
+    def newAnimation(self):
+        
+        self.makeAnimation()
+        self.animation.reverse()
+        self.animationList.append(self.animation)
+        self.clearAnimation()
+       
+    def makeAnimation(self):
+        for i in range(max(len(self.move), len(self.turn), len(self.gunTurn), len(self.radarTurn) )):
+            try:
+                m = self.move[i]
+            except IndexError:
+                m = 0
+            try:
+                t = self.turn[i]
+            except IndexError:
+                t = 0
+            try:
+                g = self.gunTurn[i]
+            except IndexError:
+                g = 0
+            try:
+                r = self.radarTurn[i]
+            except IndexError:
+                r = 0
+            self.animation.append({"move": m, "turn": t, "gunTurn":g, "radarTurn":r})
+
+            
+    def clearAnimation(self):
+        self.move = []
+        self.turn = []
+        self.animation = []
+          

@@ -28,7 +28,7 @@ class Graph(QGraphicsScene):
         
         for bot in botList:
             try:
-                robot = bot((self.width, self.height), self)
+                robot = bot(self.sceneRect().size(), self)
                 self.genPos(robot)
                 self.addItem(robot)
                 while set(robot.collidingItems()) - robot.items != set([]):

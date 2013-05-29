@@ -18,7 +18,7 @@ class Bullet(QGraphicsPixmapItem):
         self.maskColor = QtGui.QColor(255, 128, 0)
         self.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/blast.png")
         self.setPixmap(self.pixmap)
-        self.maskColor = color
+        self.setColour(color)
         #physics
         self.width = self.boundingRect().width()
         self.height = self.boundingRect().height()
@@ -58,11 +58,10 @@ class Bullet(QGraphicsPixmapItem):
         dx = - math.sin(math.radians(self.angle))*10.0
         dy = math.cos(math.radians(self.angle))*10.0
         self.setPos(x+dx, y+dy)
-        
-        if self.collidingItems(1) != []:
-            for item in set(self.collidingItems(1)):
-                if isinstance(item, QtGui.QGraphicsRectItem):
-                    self.scene.removeItem(self)
+        if x < 0 or y < 0 or x > self.scene.width or y > self.scene.height:
+            self.scene.removeItem(self)
+            self.robot.items.remove(self)
+
         
             
             
