@@ -34,7 +34,8 @@
     - [x]  on_Robot_Death()
     - [x]  reset()             --> too stop all move at any time
     - [x]  stop()              --> too allow to make moves sequences
-    - [ ]  RobotPrint()        --> too allow the robot to print in a textBox
+    - [x]  RobotPrint()        --> too allow the robot to print in a textBox
+    - [x] RobotMenu with lifeBar
     - [ ]  Battle Series
     - [ ]  Batlles Statistics
     - [ ]  .exe
