@@ -20,8 +20,7 @@ class physics():
     def reverse(self):
         self.animationList.reverse()     
         
-    def newAnimation(self):
-        
+    def newAnimation(self): 
         self.makeAnimation()
         self.animation.reverse()
         self.animationList.append(self.animation)

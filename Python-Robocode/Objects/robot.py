@@ -242,16 +242,29 @@ class Robot(QtGui.QGraphicsItemGroup):
         r = self.boundingRect()
         return QtCore.QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
         
+    def getGunHeading(self):
+        return self.gun.rotation()
+        
+    def getHeading(self):
+        return self.gun.rotation()
+        
+    def getRadarHeading(self):
+        return self.gun.rotation()
+        
     def reset(self):
         self.physics.reset()
         
-    def getNbrOfEnemiesLeft(self):
+    def getEnemiesLeft(self):
         return len(self.parent.aliveBots)
         
     def rPrint(self, msg):
         self.info.out.add(str(msg))
         
-        
+    def pause(self, duration):
+        self.stop()
+        for i in range(int(duration)):
+            self.physics.move.append(0)
+        self.stop()
     ###end of functions accessable from robot###
             
     # Calculus
@@ -289,6 +302,7 @@ class Robot(QtGui.QGraphicsItemGroup):
             y = - self.physics.step*1.1
         self.setPos(self.pos().x() + x, self.pos().y() + y)
         self.changeHealth(self,  -1)
+        self.onHitWall()
        
         
     def robotRebound(self, robot):
@@ -307,6 +321,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         robot.setPos(x+dx, y+dy)
         self.changeHealth(robot,  -1)
         self.changeHealth(self,  -1)
+        self.onRobotHit(id(robot))
         
     def bulletRebound(self, bullet):
         self.changeHealth(self,  - bullet.power)
@@ -330,7 +345,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.parent.aliveBots.remove(self)
         self.onRobotDeath()
         self.parent.removeItem(self)
-
+        print  len(self.parent.aliveBots)
         if  len(self.parent.aliveBots) <= 1:
             self.parent.battleFinished()
             

@@ -33,6 +33,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Start the last battle
         """
+        try:
+            self.scene.clear()
+        except:
+            pass
         with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
             unpickler = pickle.Unpickler(file)
             dico = unpickler.load()

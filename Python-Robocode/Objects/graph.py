@@ -45,8 +45,11 @@ class Graph(QGraphicsScene):
 
     def  battleFinished(self):
         print "battle terminated"
-        self.deadBots.append(self.aliveBots[0])
-        self.removeItem(self.aliveBots[0])
+        try:
+            self.deadBots.append(self.aliveBots[0])
+            self.removeItem(self.aliveBots[0])
+        except IndexError:
+            pass
         j = len(self.deadBots)
         for i in range(j):
             print "N°",  j - i , ":", self.deadBots[i]

@@ -35,8 +35,8 @@ class RobotInfo(QWidget, Ui_Form):
         """
         Slot documentation goes here.
         """
-        green = value*2
-        red = 50 + 200 - value*2
+        green = int(value*2)
+        red = int(50 + 200 - value*2)
         self.progressBar.setStyleSheet("""
         QProgressBar {
         border: 2px solid grey;
