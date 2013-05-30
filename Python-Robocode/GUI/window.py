@@ -25,31 +25,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.timer = QTimer()
-        self.sceneMenu = QGraphicsScene()
-        self.graphicsView_2.setScene(self.sceneMenu)
+        self.countBattle = 0
+        
     
     @pyqtSignature("")
     def on_pushButton_clicked(self):
         """
         Start the last battle
         """
-        try:
-            self.scene.clear()
-        except:
-            pass
         with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
             unpickler = pickle.Unpickler(file)
             dico = unpickler.load()
         file.close()
 
-        self.startBattle(dico["width"] , dico["height"], dico["botList"] )
-
+        self.setUpBattle(dico["width"] , dico["height"], dico["botList"] )
         
-    def startBattle(self, width, height, botList):
-        self.scene = Graph(self,  width,  height)
+    def setUpBattle(self, width, height, botList):
+        self.width = width
+        self.height = height
+        self.botList = botList
+        self.startBattle()
+        
+    def startBattle(self):
+        try:
+            del self.scene
+            del self.sceneMenu
+        except:
+            pass
+        self.countBattle += 1
+        self.sceneMenu = QGraphicsScene()
+        self.graphicsView_2.setScene(self.sceneMenu)
+        self.scene = Graph(self,  self.width,  self.height)
         self.graphicsView.setScene(self.scene)
-        self.scene.AddRobots(botList)
+        self.scene.AddRobots(self.botList)
+    
         self.connect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
+
         self.resizeEvent()
     
     @pyqtSignature("int")
@@ -73,7 +84,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        print "Not Implemented Yet"
     
     @pyqtSignature("")
     def on_actionOpen_activated(self):
@@ -81,7 +92,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        print "Not Implemented Yet"
 
     def resizeEvent(self, evt=None):
         try:
@@ -102,3 +113,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.sceneMenu.setSceneRect(0, 0, 170, l*80)
         p.setPos(0, (l -1)*80)
         
+    def chooseAction(self):
+        if self.countBattle >= self.spinBox.value():
+            "Menu Statistic"
+            self.countBattle = 0
+            self.timer.stop()
+        else:
+            self.startBattle()
+            

@@ -76,7 +76,7 @@ class Battle(QDialog, Ui_Dialog):
             botList.append(self.listBots[key])
             
         self.save(width, height, botList)
-        self.window.startBattle(width, height, botList)
+        self.window.setUpBattle(width, height, botList)
         self.close()
         
         

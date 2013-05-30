@@ -54,7 +54,7 @@ class Graph(QGraphicsScene):
         for i in range(j):
             print "N°",  j - i , ":", self.deadBots[i]
             
-        self.Parent.timer.stop()
+        self.Parent.chooseAction()
 
     def genPos(self, bot):
         

@@ -2,27 +2,37 @@
 #-*- coding: utf-8 -*-
 
 
-from PyQt4.QtGui import QGraphicsScene,  QWidget
-from PyQt4.QtCore import SIGNAL
+
 from PyQt4 import QtCore,  Qt
 from PyQt4 import QtGui
 import os
 from physics import physics
 import math
 from bullet import Bullet
+from radarField import radarField
+from animation import animation
 
 class Robot(QtGui.QGraphicsItemGroup):
     
     def __init__(self,  mapSize, parent, repr):
         QtGui.QGraphicsItemGroup.__init__(self)
-        QWidget.__init__(self)
         #Attributes
         self.mapSize = mapSize
-        self.physics = physics()
         self.parent = parent
         self.health = 100
         self.repr = repr
         self.outMsg = []
+        self.isReading = False
+        self.countFrame = 0
+        self.gunLock = "free"
+        self.radarLock = "Free"
+        self.lockTarget = True
+        
+        #animation
+        self.runAnimation = animation("run")
+        self.targetAnimation = animation("target")
+        self.physics = physics(self.runAnimation)
+        
         
         #graphics
         self.maskColor = QtGui.QColor(0, 255, 255)
@@ -59,6 +69,22 @@ class Robot(QtGui.QGraphicsItemGroup):
         #radar position
         self.radar.setPos(x - self.radarWidth/2.0 ,  y - self.radarHeight /2.0)
         
+        #load radarField
+        firstPoint = QtCore.QPointF(x - self.radarWidth/2, y)
+        secondPoint = QtCore.QPointF(x + self.radarWidth/2, y)
+        thirdPoint = QtCore.QPointF(x + 2*self.radarWidth, y + 400)
+        fourthPoint = QtCore.QPointF(x - 2*self.radarWidth, y+ 400)
+        qPointListe = []
+        qPointListe.append(firstPoint)
+        qPointListe.append(secondPoint)
+        qPointListe.append(thirdPoint)
+        qPointListe.append(fourthPoint)
+        self.radarField = radarField(qPointListe, self)
+        self.addToGroup(self.radarField)
+        self.radarFieldWidth = self.radarField.boundingRect().width()
+        self.radarFieldHeight = self.radarField.boundingRect().height()
+        self.setPos(x - self.radarFieldWidth/2.0 ,  y - self.radarFieldHeight /2.0)
+        
         #Set the bot color in RGB
         self.setColor(0, 200, 100)
         self.setGunColor(0, 200, 100)
@@ -66,6 +92,8 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.setBulletsColor(0, 200, 100)
         
         #set the Origin point for Transformation:
+        #radarField
+        self.radarField.setTransformOriginPoint(x, y)
         #base
         x = self.baseWidth/2
         y = self.baseHeight/2
@@ -78,9 +106,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         x = self.radarWidth/2
         y = self.radarHeight /2
         self.radar.setTransformOriginPoint(x, y)
+
         
         #add self items in items to avoid collisions
-        self.items = set([self, self.base, self.gun, self.radar])
+        self.items = set([self, self.base, self.gun, self.radar, self.radarField])
         
         #init the subclassed Bot
         self.init()
@@ -90,49 +119,77 @@ class Robot(QtGui.QGraphicsItemGroup):
     def advance(self, i):
         if self.health <= 0:
             self.death()
-            
+        self.countFrame +=1
+        
+        if self.currentAnimation == []:
+            try:
+                self.currentAnimation  = self.physics.animation.list.pop()
+                self.rPrint("------------------------------------")
+            except IndexError:
+                if self.physics.animation.name == "target":
+                    try:
+                        self.physics.animation = self.runAnimation
+                        self.currentAnimation  = self.physics.animation.list.pop()
+                    except IndexError:
+                        pass
+                else:
+                    self.stop()
+                    self.run()
+                    self.rPrint("--------------RUN-----------------")
+                    self.physics.reverse()
+                    self.currentAnimation  = self.physics.animation.list.pop()
+                    
         if i == 1:
-            
-            if self.physics.animationList == []:
-                self.run()
-                self.physics.reverse()
-                
-            if self.currentAnimation == []:
-                try:
-                    self.currentAnimation  = self.physics.animationList.pop()
-                except IndexError:
-                    pass
             try:
                 command = self.currentAnimation.pop() #load animation
+                self.rPrint(command)
                 #translation
                 dx, dy= self.getTranslation(command["move"])
                 self.setPos(dx, dy)
                 #rotation
                 angle = self.getRotation(command["turn"])
                 self.base.setRotation(angle)
+                if self.gunLock.lower() == 'base':
+                    self.gun.setRotation(angle)
+                if self.radarLock.lower() == 'base':
+                    self.radar.setRotation(angle)
                 #gun Rotation
                 angle = self.getGunRotation(command["gunTurn"])
                 self.gun.setRotation(angle)
+                if self.radarLock.lower() == 'gun':
+                    self.radar.setRotation(angle)
+                    self.radarField.setRotation(angle)
                 #radar Rotation
                 angle = self.getRadarRotation(command["radarTurn"])
                 self.radar.setRotation(angle)
+                self.radarField.setRotation(angle)
+                #asynchronous fire
+                if command["fire"] != 0:
+                    self.makeBullet(command["fire"] )
             except:
                 pass
             
-        else: #sensor
+        else:
             
             self.sensors()
-            
-        #collisions
-        for item in set(self.base.collidingItems(1)) - self.items:
-            if isinstance(item, QtGui.QGraphicsRectItem):
-                #wall Collision
-                self.wallRebound(item)
-            elif isinstance(item, Robot):
-                #robot Collision
-                self.robotRebound(item)
-            elif isinstance(item, Bullet):
-                self.bulletRebound(item)
+                
+                
+            #collisions
+            for item in set(self.base.collidingItems(1)) - self.items:
+                if isinstance(item, QtGui.QGraphicsRectItem):
+                    #wall Collision
+                    self.wallRebound(item)
+                elif isinstance(item, Robot):
+                    if item.base.collidesWithItem(self.base):
+                        #robot Collision
+                        self.robotRebound(item)
+                elif isinstance(item, Bullet):
+                    #bullet colision
+                    self.bulletRebound(item)
+                elif isinstance(item, radarField):
+                    if item.robot.physics.animation.name != "target":
+                        #targetSpotted
+                        self.targetSeen(item)
         
      ### THESE ARE THE FUNCTIONS ACCESSABLE FROM OUTSIDE ###   
      
@@ -184,6 +241,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.maskColor = QtGui.QColor(r, g, b)
         
     #---------------------------------------------RADAR------------------------------------------------
+
+        
+    def lockRadar(self, part):
+        self.radarLock = part
         
     def radarTurn(self, angle):
         s = 1
@@ -203,10 +264,26 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.radar.setPixmap(self.radar.pixmap)
         self.radarMaskColor = QtGui.QColor(r, g, b)
         
+    def radarvisible(self, bol):
+        self.radarField.setVisible(bol)
+        
     #------------------------------------------------Bullets---------------------------------------
         
-    def fire(self, power):
+    def fireNow(self, power):
+        bullet = Bullet(power, self.bulletColor)
+        self.makeBullet(bullet)
+        return id(bullet)
         
+    def fire(self, power):
+        #asynchronous fire
+        self.stop()
+        bullet = Bullet(power, self.bulletColor)
+        self.physics.fire.append(bullet)
+        self.items.add(bullet)
+        self.parent.addItem(bullet)
+        return id(bullet)
+
+    def makeBullet(self, bullet):
         pos = self.pos()
         angle = self.gun.rotation()
         #to find the initial position
@@ -216,14 +293,9 @@ class Robot(QtGui.QGraphicsItemGroup):
         dy = math.cos(math.radians(angle))*self.gunHeight/2.0
         pos.setX(x+dx)
         pos.setY(y+dy)
-        
-        color = self.bulletColor
         bot = self
-        
-        bullet = Bullet(pos, color, bot, angle, power, self.parent)
-        self.items.add(bullet)
-        self.parent.addItem(bullet)
-        
+        bullet.init(pos, bot, angle, self.parent)
+
         self.changeHealth(self, -bullet.power) 
         return id(bullet)
         
@@ -253,6 +325,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     def reset(self):
         self.physics.reset()
+        self.currentAnimation = []
         
     def getEnemiesLeft(self):
         return len(self.parent.aliveBots)
@@ -302,7 +375,12 @@ class Robot(QtGui.QGraphicsItemGroup):
             y = - self.physics.step*1.1
         self.setPos(self.pos().x() + x, self.pos().y() + y)
         self.changeHealth(self,  -1)
+        self.stop()
         self.onHitWall()
+        animation = self.physics.makeAnimation()
+        if animation != []:
+            self.currentAnimation = animation
+        
        
         
     def robotRebound(self, robot):
@@ -321,31 +399,65 @@ class Robot(QtGui.QGraphicsItemGroup):
         robot.setPos(x+dx, y+dy)
         self.changeHealth(robot,  -1)
         self.changeHealth(self,  -1)
+        self.stop()
         self.onRobotHit(id(robot))
+        animation = self.physics.makeAnimation()
+        if animation != []:
+            self.currentAnimation = animation
+        robot.stop()
+        robot.onHitByRobot()
+        animation = robot.physics.makeAnimation()
+        if animation != []:
+            robot.currentAnimation = animation
+
+        
         
     def bulletRebound(self, bullet):
         self.changeHealth(self,  - bullet.power)
         if bullet.robot in self.parent.aliveBots:
             self.changeHealth(bullet.robot,   bullet.power)
+        self.stop()
         self.onHitByBullet(id(bullet.robot), bullet.power)
+        animation = self.physics.makeAnimation()
+        if animation != []:
+            self.currentAnimation = animation
+        bullet.robot.stop()
         bullet.robot.onBulletHit(id(self), id(bullet))
+        animation = bullet.robot.physics.makeAnimation()
+        if animation != []:
+            bullet.robot.currentAnimation = animation
         self.parent.removeItem(bullet)
+        
+ 
+    def targetSeen(self, target):
+        self.stop()
+        target.robot.physics.animation = target.robot.targetAnimation
+        target.robot.physics.reset()
+        target.robot.onTargetSpotted(id(self), self.getPosition())
+        target.robot.physics.newAnimation()
+        target.robot.physics.reverse()
+        target.robot.currentAnimation  = target.robot.physics.animation.list.pop()
+        target.robot.rPrint("---------Target Animation----------")
         
     def changeHealth(self, bot, value):
         if bot.health + value>=100:
             bot.health = 100
         else:
             bot.health = bot.health + value
-        
-        bot.progressBar.setValue(bot.health)
+        try:
+            bot.progressBar.setValue(bot.health)
+        except:
+            pass
 
     def death(self):
-        self.progressBar.setValue(0)
+        try:
+            self.progressBar.setValue(0)
+        except :
+            pass
         self.parent.deadBots.append(self)
         self.parent.aliveBots.remove(self)
         self.onRobotDeath()
         self.parent.removeItem(self)
-        print  len(self.parent.aliveBots)
         if  len(self.parent.aliveBots) <= 1:
             self.parent.battleFinished()
             

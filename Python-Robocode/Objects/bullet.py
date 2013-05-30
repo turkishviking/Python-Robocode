@@ -7,18 +7,18 @@ from PyQt4.QtCore import SIGNAL
 from PyQt4 import QtCore,  Qt
 from PyQt4 import QtGui
 import os
-from physics import physics
 import math
 
 class Bullet(QGraphicsPixmapItem):
     
-    def __init__(self, pos, color, bot, angle, power, scene):
+    def __init__(self, power, color):
         QGraphicsPixmapItem.__init__(self)
         #graphics
         self.maskColor = QtGui.QColor(255, 128, 0)
         self.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/blast.png")
         self.setPixmap(self.pixmap)
         self.setColour(color)
+        self.isfired = False
         #physics
         self.width = self.boundingRect().width()
         self.height = self.boundingRect().height()
@@ -28,15 +28,18 @@ class Bullet(QGraphicsPixmapItem):
             power = 10
         self.power = power
         bsize = power
-        if bsize < 3:
+        if power < 3:
             bsize = 4
         self.pixmap = self.pixmap.scaled(bsize, bsize)
         self.setPixmap(self.pixmap)
+        
+    def init(self, pos, bot, angle, scene):
+
         self.robot = bot
         self.angle = angle
         self.setPos(pos)
-        self.physics = physics()
         self.scene = scene
+        self.isfired = True
 
         
     def setColour(self, color):
@@ -49,19 +52,18 @@ class Bullet(QGraphicsPixmapItem):
         self.maskColor = color
         
     def advance(self, i):
-        if not i:
-            return
-
-        pos = self.pos()
-        x = pos.x()
-        y = pos.y()
-        dx = - math.sin(math.radians(self.angle))*10.0
-        dy = math.cos(math.radians(self.angle))*10.0
-        self.setPos(x+dx, y+dy)
-        if x < 0 or y < 0 or x > self.scene.width or y > self.scene.height:
-            self.robot.onBulletMiss(id(self))
-            self.scene.removeItem(self)
-            self.robot.items.remove(self)
+        if self.isfired:
+            
+            pos = self.pos()
+            x = pos.x()
+            y = pos.y()
+            dx = - math.sin(math.radians(self.angle))*10.0
+            dy = math.cos(math.radians(self.angle))*10.0
+            self.setPos(x+dx, y+dy)
+            if x < 0 or y < 0 or x > self.scene.width or y > self.scene.height:
+                self.robot.onBulletMiss(id(self))
+                self.scene.removeItem(self)
+                self.robot.items.remove(self)
 
         
             

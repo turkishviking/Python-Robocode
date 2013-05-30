@@ -21,9 +21,9 @@
     - [x]  gunTurn()
     - [x]  radarTurn()
     - [x]  getPostion
-    - [ ]  radarDetection()
-    - [ ]  getTargetPosition()
-    - [ ]  getTargetName()
+    - [x]  radarDetection()
+    - [x]  getTargetPosition()
+    - [x]  getTargetName()
     - [x]  bulletPower
     - [x]  on_hit_by_bullet()  -->   Detected but not effective
     - [x]  bulletSize
@@ -36,7 +36,7 @@
     - [x]  stop()              --> too allow to make moves sequences
     - [x]  RobotPrint()        --> too allow the robot to print in a textBox
     - [x] RobotMenu with lifeBar
-    - [ ]  Battle Series
+    - [x]  Battle Series
     - [ ]  Batlles Statistics
     - [ ]  .exe
     - [ ]  .deb
