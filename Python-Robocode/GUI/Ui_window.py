@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/Python-Robocode/GUI/window.ui'
 #
-# Created: Wed May 29 01:37:50 2013
+# Created: Thu May 30 02:21:42 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -31,6 +31,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.graphicsView = QtGui.QGraphicsView(self.centralwidget)
         self.graphicsView.setEnabled(True)
+        self.graphicsView.setStyleSheet(_fromUtf8("background-color: rgba(206, 206, 206, 162);"))
         self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
         self.verticalLayout.addWidget(self.graphicsView)
         self.horizontalLayout = QtGui.QHBoxLayout()
@@ -60,17 +61,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.horizontalSlider)
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
-        self.listWidget = QtGui.QListWidget(self.centralwidget)
+        self.graphicsView_2 = QtGui.QGraphicsView(self.centralwidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.listWidget.sizePolicy().hasHeightForWidth())
-        self.listWidget.setSizePolicy(sizePolicy)
-        self.listWidget.setMinimumSize(QtCore.QSize(200, 0))
-        self.listWidget.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.listWidget.setStyleSheet(_fromUtf8("background-color:rgba(215, 215, 215, 214)"))
-        self.listWidget.setObjectName(_fromUtf8("listWidget"))
-        self.horizontalLayout_2.addWidget(self.listWidget)
+        sizePolicy.setHeightForWidth(self.graphicsView_2.sizePolicy().hasHeightForWidth())
+        self.graphicsView_2.setSizePolicy(sizePolicy)
+        self.graphicsView_2.setMinimumSize(QtCore.QSize(200, 0))
+        self.graphicsView_2.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.graphicsView_2.setStyleSheet(_fromUtf8("background-color: rgba(194, 194, 194, 167);"))
+        self.graphicsView_2.setObjectName(_fromUtf8("graphicsView_2"))
+        self.horizontalLayout_2.addWidget(self.graphicsView_2)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)

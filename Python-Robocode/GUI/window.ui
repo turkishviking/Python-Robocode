@@ -28,6 +28,9 @@
           <property name="enabled">
            <bool>true</bool>
           </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgba(206, 206, 206, 162);</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -98,7 +101,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QListWidget" name="listWidget">
+       <widget class="QGraphicsView" name="graphicsView_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -118,7 +121,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:rgba(215, 215, 215, 214)</string>
+         <string notr="true">background-color: rgba(194, 194, 194, 167);</string>
         </property>
        </widget>
       </item>

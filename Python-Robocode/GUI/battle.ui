@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Battle Selection</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>robotImages/smallgrey.png</normaloff>robotImages/smallgrey.png</iconset>
+  </property>
   <property name="modal">
    <bool>false</bool>
   </property>

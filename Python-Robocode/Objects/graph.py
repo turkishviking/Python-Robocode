@@ -7,6 +7,7 @@ from PyQt4 import QtCore,  Qt
 from robot import Robot
 from wall import Wall
 import time,  os,  random
+from outPrint import outPrint
 
 class Graph(QGraphicsScene):
     
@@ -34,6 +35,7 @@ class Graph(QGraphicsScene):
                 self.aliveBots.append(robot)
                 self.genPos(robot)
                 self.addItem(robot)
+                self.Parent.addRobotInfo(robot)
                 while set(robot.collidingItems()) - robot.items != set([]):
                     self.genPos(robot)
             except Exception,  e:

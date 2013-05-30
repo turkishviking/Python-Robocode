@@ -2,7 +2,7 @@
 #-*- coding: utf-8 -*-
 
 
-from PyQt4.QtGui import QGraphicsScene,  QWidget,  QTransform
+from PyQt4.QtGui import QGraphicsScene,  QWidget
 from PyQt4.QtCore import SIGNAL
 from PyQt4 import QtCore,  Qt
 from PyQt4 import QtGui
@@ -22,6 +22,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.parent = parent
         self.health = 100
         self.repr = repr
+        self.outMsg = []
         
         #graphics
         self.maskColor = QtGui.QColor(0, 255, 255)
@@ -223,7 +224,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.items.add(bullet)
         self.parent.addItem(bullet)
         
-        self.health -= bullet.power
+        self.changeHealth(self, -bullet.power) 
         return id(bullet)
         
     def setBulletsColor(self, r, g, b):
@@ -246,6 +247,9 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     def getNbrOfEnemiesLeft(self):
         return len(self.parent.aliveBots)
+        
+    def rPrint(self, msg):
+        self.info.out.add(str(msg))
         
         
     ###end of functions accessable from robot###
@@ -284,7 +288,8 @@ class Robot(QtGui.QGraphicsItemGroup):
             x = 0
             y = - self.physics.step*1.1
         self.setPos(self.pos().x() + x, self.pos().y() + y)
-        self.health -= 1
+        self.changeHealth(self,  -1)
+       
         
     def robotRebound(self, robot):
         self.reset()
@@ -300,25 +305,31 @@ class Robot(QtGui.QGraphicsItemGroup):
         x = pos.x()
         y = pos.y()
         robot.setPos(x+dx, y+dy)
-        robot.health -= 1
-        self.health -= 1
+        self.changeHealth(robot,  -1)
+        self.changeHealth(self,  -1)
         
     def bulletRebound(self, bullet):
-        self.health -= bullet.power
-        bullet.robot.health += bullet.power
+        self.changeHealth(self,  - bullet.power)
+        if bullet.robot in self.parent.aliveBots:
+            self.changeHealth(bullet.robot,   bullet.power)
         self.onHitByBullet(id(bullet.robot), bullet.power)
         bullet.robot.onBulletHit(id(self), id(bullet))
         self.parent.removeItem(bullet)
+        
+    def changeHealth(self, bot, value):
+        if bot.health + value>=100:
+            bot.health = 100
+        else:
+            bot.health = bot.health + value
+        
+        bot.progressBar.setValue(bot.health)
 
     def death(self):
+        self.progressBar.setValue(0)
         self.parent.deadBots.append(self)
         self.parent.aliveBots.remove(self)
+        self.onRobotDeath()
         self.parent.removeItem(self)
-        #manage the right menu here
-        try:
-            self.onRobotDeath()
-        except:
-            pass
 
         if  len(self.parent.aliveBots) <= 1:
             self.parent.battleFinished()

@@ -1,13 +1,14 @@
 (dp0
 S'width'
 p1
-I1000
+I700
 sS'botList'
 p2
 (lp3
 ccharlier
 Charlier
 p4
+ag4
 ag4
 ag4
 ag4
@@ -20,7 +21,8 @@ ag5
 ag5
 ag5
 ag5
+ag5
 asS'height'
 p6
-I800
+I500
 s.

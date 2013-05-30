@@ -4,13 +4,15 @@
 Module implementing MainWindow.
 """
 
-from PyQt4.QtGui import QMainWindow
+from PyQt4.QtGui import QMainWindow, QGraphicsScene
+from PyQt4 import QtGui 
 from PyQt4.QtCore import pyqtSignature,  QTimer,  SIGNAL
 from graph import Graph
 from Ui_window import Ui_MainWindow
 from battle import Battle
 import os,  pickle
 from robot import Robot
+from RobotInfo import RobotInfo
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -23,6 +25,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.timer = QTimer()
+        self.sceneMenu = QGraphicsScene()
+        self.graphicsView_2.setScene(self.sceneMenu)
     
     @pyqtSignature("")
     def on_pushButton_clicked(self):
@@ -81,4 +85,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         except :
             pass
 
+    def addRobotInfo(self, robot):
+        self.sceneMenu.setSceneRect(0, 0, 170, 800)
+        rb = RobotInfo()
+        rb.pushButton.setText(str(robot))
+        rb.progressBar.setValue(100)
+        rb.robot = robot
+        robot.info = rb
+        robot.progressBar = rb.progressBar
+        p = self.sceneMenu.addWidget(rb)
+        l = (len(self.scene.aliveBots) )
+        self.sceneMenu.setSceneRect(0, 0, 170, l*80)
+        p.setPos(0, (l -1)*80)
         

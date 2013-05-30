@@ -50,17 +50,17 @@ class Charlie(Robot): #Create a Robot
        
     def onHitByBullet(self, bulletBotId, bulletPower): #NECESARY FOR THE GAME
         """ When i'm hit by a bullet"""
-        print "hit by ", bulletBotId, "with power:", bulletPower
+        self.rPrint ("hit by " + str(bulletBotId) + "with power:" +str( bulletPower))
         
     def onBulletHit(self, botId, bulletId):#NECESARY FOR THE GAME
         """when my bullet hit a bot"""
-        print "fire done on ",  botId
+        self.rPrint ("fire done on " +str( botId))
         
     def onBulletMiss(self, bulletId):#NECESARY FOR THE GAME
         """when my bullet hit a wall"""
-        print "the bullet ",  bulletId, "fail"
+        self.rPrint ("the bullet "+ str(bulletId) + " fail")
         
-    def onRobotDeath(self):
+    def onRobotDeath(self):#NECESARY FOR THE GAME
         """When my bot die"""
-        print "damn I'm Dead"
+        self.rPrint ("damn I'm Dead")
     

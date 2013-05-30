@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/GUI/battle.ui'
+# Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/Python-Robocode/GUI/battle.ui'
 #
-# Created: Tue May 28 23:15:19 2013
+# Created: Thu May 30 02:21:40 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,6 +18,9 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(572, 399)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/smallgrey.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Dialog.setWindowIcon(icon)
         Dialog.setModal(False)
         self.verticalLayout_5 = QtGui.QVBoxLayout(Dialog)
         self.verticalLayout_5.setObjectName(_fromUtf8("verticalLayout_5"))
