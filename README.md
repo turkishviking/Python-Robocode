@@ -6,12 +6,13 @@
 ### A Fork of Robocode for python programming
 
 #### This is the new and maintained version developed with PyQt
+### Need help to start? watch the [wiki](https://github.com/turkishviking/Python-Robocode/wiki)
 
 ####Any help would be welcome!
 
 #####This is a beta version, tell me if you watch some bugs
 
-### Need help to start? watch th [wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+
 
 
 
