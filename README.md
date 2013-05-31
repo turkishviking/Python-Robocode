@@ -11,6 +11,8 @@
 
 #####This is a beta version, tell me if you watch some bugs
 
+### Need help to start? watch th [wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+
 
 
 

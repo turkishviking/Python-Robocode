@@ -65,7 +65,7 @@ class Charlie(Robot): #Create a Robot
         self.pause(100)
         self.move(-100)
         self.rPrint('ouch! a wall !')
-        self.setRadarField("large")
+        self.setRadarField("large") #Change the radar field form
     
     def onRobotHit(self, robotId): # when My bot hit another
         self.rPrint('collision with:' + str(robotId)) #Print information in the robotMenu (click on the righ panel to see it)
