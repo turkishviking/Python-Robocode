@@ -1,7 +1,7 @@
 #! /usr/bin/python
 #-*- coding: utf-8 -*-
 
-from PyQt4.QtGui import QGraphicsScene,  QWidget,  QCursor, QMouseEvent,  QBrush, QColor, QPixmap, QGraphicsRectItem
+from PyQt4.QtGui import QGraphicsScene,  QMessageBox,  QBrush, QColor, QPixmap, QGraphicsRectItem
 from PyQt4.QtCore import SIGNAL,  QPointF
 from PyQt4 import QtCore,  Qt
 from robot import Robot
@@ -19,7 +19,7 @@ class Graph(QGraphicsScene):
         #self.Parent.graphicsView.centerOn(250, 250)
         self.width = width
         self.height = height
-        
+        self.grid = self.getGrid()
         self.setTiles()
 
         
@@ -29,19 +29,21 @@ class Graph(QGraphicsScene):
         """
         self.aliveBots = []
         self.deadBots = []
-        for bot in botList:
-            try:
-                robot = bot(self.sceneRect().size(), self, str(bot))
-                self.aliveBots.append(robot)
-                self.genPos(robot)
-                self.addItem(robot)
-                self.Parent.addRobotInfo(robot)
-                while set(robot.collidingItems()) - robot.items != set([]):
-                    self.genPos(robot)
-            except Exception,  e:
-                print "Problem with bot file '%s': %s" % (bot, str(e))
-                
-        self.Parent.timer.start((self.Parent.horizontalSlider.value()**2)/100.0)
+        try:
+            posList = random.sample(self.grid, len(botList))
+            self.Parent.battleMenu.close()
+            for bot in botList:
+                try:
+                    robot = bot(self.sceneRect().size(), self, str(bot))
+                    self.aliveBots.append(robot)
+                    self.addItem(robot)
+                    robot.setPos(posList.pop())
+                    self.Parent.addRobotInfo(robot)
+
+                except Exception,  e:
+                    print "Problem with bot file '%s': %s" % (bot, str(e))
+        except ValueError:
+            QMessageBox.about(self.Parent, "Alert", "Too many Bots for the map's size!")
 
     def  battleFinished(self):
         print "battle terminated"
@@ -54,18 +56,7 @@ class Graph(QGraphicsScene):
         for i in range(j):
             print "N°",  j - i , ":", self.deadBots[i]
             
-        self.Parent.chooseAction()
-
-    def genPos(self, bot):
-        
-        x = random.random() * self.width
-        y = random.random() * self.height
-        if x < bot.baseWidth or x > self.width - bot.baseWidth:
-            x = random.random() * self.width
-        if y < bot.baseHeight or y > self.height - bot.baseHeight:
-            y = random.random() * self.height
-        bot.setPos(x, y)
-       
+        self.Parent.chooseAction()       
 
                     
     def setTiles(self):
@@ -108,4 +99,11 @@ class Graph(QGraphicsScene):
         bottom.name = 'bottom'
         self.addItem(bottom)
         
-        
+    def getGrid(self):
+        w = int(self.width/80)
+        h = int(self.height/80)
+        l = []
+        for i in range(w):
+            for j in range(h):
+                l.append(QtCore.QPointF((i+0.5)*80, (j+0.5)*80))
+        return l

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/Python-Robocode/GUI/RobotInfo.ui'
 #
-# Created: Thu May 30 02:21:37 2013
+# Created: Fri May 31 15:45:44 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -33,11 +33,13 @@ class Ui_Form(object):
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.toolButton_2 = QtGui.QToolButton(Form)
+        self.toolButton_2.setEnabled(False)
         self.toolButton_2.setMinimumSize(QtCore.QSize(30, 30))
         self.toolButton_2.setMaximumSize(QtCore.QSize(30, 30))
         self.toolButton_2.setStyleSheet(_fromUtf8("background-color: rgba(255, 255, 255, 0);"))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/small.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/small.png")), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         self.toolButton_2.setIcon(icon)
         self.toolButton_2.setIconSize(QtCore.QSize(30, 30))
         self.toolButton_2.setCheckable(False)
@@ -56,11 +58,13 @@ class Ui_Form(object):
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.toolButton = QtGui.QToolButton(Form)
+        self.toolButton.setEnabled(False)
         self.toolButton.setMinimumSize(QtCore.QSize(30, 30))
         self.toolButton.setMaximumSize(QtCore.QSize(30, 30))
         self.toolButton.setStyleSheet(_fromUtf8("background-color: rgba(255, 255, 255, 0);"))
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/smallRed.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/smallRed.png")), QtGui.QIcon.Disabled, QtGui.QIcon.Off)
         self.toolButton.setIcon(icon1)
         self.toolButton.setIconSize(QtCore.QSize(30, 30))
         self.toolButton.setCheckable(False)

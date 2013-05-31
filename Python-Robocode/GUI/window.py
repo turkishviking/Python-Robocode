@@ -24,7 +24,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
-        self.timer = QTimer()
         self.countBattle = 0
         
     
@@ -47,20 +46,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.startBattle()
         
     def startBattle(self):
+        
         try:
+            self.disconnect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
+            del self.timer
             del self.scene
             del self.sceneMenu
         except:
             pass
+            
+        self.timer = QTimer()
         self.countBattle += 1
         self.sceneMenu = QGraphicsScene()
         self.graphicsView_2.setScene(self.sceneMenu)
         self.scene = Graph(self,  self.width,  self.height)
         self.graphicsView.setScene(self.scene)
         self.scene.AddRobots(self.botList)
-    
         self.connect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
-
+        self.timer.start((self.horizontalSlider.value()**2)/100.0)
         self.resizeEvent()
     
     @pyqtSignature("int")
@@ -73,7 +76,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @pyqtSignature("")
     def on_actionNew_activated(self):
         """
-        Slot documentation goes here.
+        Battle Menu
         """
         self.battleMenu = Battle(self)
         self.battleMenu.show()

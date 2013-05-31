@@ -137,7 +137,10 @@ class Robot(QtGui.QGraphicsItemGroup):
                     self.run()
                     self.rPrint("--------------RUN-----------------")
                     self.physics.reverse()
-                    self.currentAnimation  = self.physics.animation.list.pop()
+                    try:
+                        self.currentAnimation  = self.physics.animation.list.pop()
+                    except:
+                        pass
                     
         if i == 1:
             try:
@@ -198,7 +201,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if angle < 0:
             s = -1
-        steps = s*angle/self.physics.step
+        steps = int(s*angle/self.physics.step)
+        a = angle%self.physics.step
+        if a != 0:
+            self.physics.gunTurn.append(s*a)
         for i in range(steps):
             self.physics.gunTurn.append(s*self.physics.step)
          
@@ -219,6 +225,9 @@ class Robot(QtGui.QGraphicsItemGroup):
         if distance < 0:
             s = -1
         steps = s*distance/self.physics.step
+        d = distance%self.physics.step
+        if d != 0:
+            self.physics.move.append(s*d)
         for i in range(steps):
             self.physics.move.append(s*self.physics.step)
                 
@@ -226,7 +235,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if angle < 0:
             s = -1
-        steps = s*angle/self.physics.step
+        steps = int(s*angle/self.physics.step)
+        a = angle%self.physics.step
+        if a != 0:
+            self.physics.turn.append(s*a)
         for i in range(steps):
             self.physics.turn.append(s*self.physics.step)
             
@@ -250,7 +262,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if angle < 0:
             s = -1
-        steps = s*angle/self.physics.step
+        steps = int(s*angle/self.physics.step)
+        a = angle%self.physics.step
+        if a != 0:
+            self.physics.radarTurn.append(s*a)
         for i in range(steps):
             self.physics.radarTurn.append(s*self.physics.step)
         
@@ -269,11 +284,6 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     #------------------------------------------------Bullets---------------------------------------
         
-    def fireNow(self, power):
-        bullet = Bullet(power, self.bulletColor)
-        self.makeBullet(bullet)
-        return id(bullet)
-        
     def fire(self, power):
         #asynchronous fire
         self.stop()
@@ -281,9 +291,11 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.physics.fire.append(bullet)
         self.items.add(bullet)
         self.parent.addItem(bullet)
+        bullet.hide()
         return id(bullet)
 
     def makeBullet(self, bullet):
+        bullet.show()
         pos = self.pos()
         angle = self.gun.rotation()
         #to find the initial position
@@ -311,14 +323,18 @@ class Robot(QtGui.QGraphicsItemGroup):
             
     def getPosition(self):
         p = self.pos()
-        r = self.boundingRect()
+        r = self.base.boundingRect()
         return QtCore.QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
         
     def getGunHeading(self):
-        return self.gun.rotation()
+        angle = self.gun.rotation()
+        if angle > 360:
+            a = int(angle) / 360
+            angle = angle - (360*a)
+        return angle
         
     def getHeading(self):
-        return self.gun.rotation()
+        return self.base.rotation()
         
     def getRadarHeading(self):
         return self.gun.rotation()
@@ -414,19 +430,22 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     def bulletRebound(self, bullet):
         self.changeHealth(self,  - bullet.power)
-        if bullet.robot in self.parent.aliveBots:
-            self.changeHealth(bullet.robot,   bullet.power)
-        self.stop()
-        self.onHitByBullet(id(bullet.robot), bullet.power)
-        animation = self.physics.makeAnimation()
-        if animation != []:
-            self.currentAnimation = animation
-        bullet.robot.stop()
-        bullet.robot.onBulletHit(id(self), id(bullet))
-        animation = bullet.robot.physics.makeAnimation()
-        if animation != []:
-            bullet.robot.currentAnimation = animation
-        self.parent.removeItem(bullet)
+        try:
+            if bullet.robot in self.parent.aliveBots:
+                self.changeHealth(bullet.robot,   bullet.power)
+            self.stop()
+            self.onHitByBullet(id(bullet.robot), bullet.power)
+            animation = self.physics.makeAnimation()
+            if animation != []:
+                self.currentAnimation = animation
+            bullet.robot.stop()
+            bullet.robot.onBulletHit(id(self), id(bullet))
+            animation = bullet.robot.physics.makeAnimation()
+            if animation != []:
+                bullet.robot.currentAnimation = animation
+            self.parent.removeItem(bullet)
+        except:
+            pass
         
  
     def targetSeen(self, target):
@@ -436,7 +455,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         target.robot.onTargetSpotted(id(self), self.getPosition())
         target.robot.physics.newAnimation()
         target.robot.physics.reverse()
-        target.robot.currentAnimation  = target.robot.physics.animation.list.pop()
+        try:
+            target.robot.currentAnimation  = target.robot.physics.animation.list.pop()
+        except:
+            pass
         target.robot.rPrint("---------Target Animation----------")
         
     def changeHealth(self, bot, value):

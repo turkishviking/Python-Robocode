@@ -20,6 +20,7 @@ class RobotInfo(QWidget, Ui_Form):
         QWidget.__init__(self, parent)
         self.setupUi(self)
         self.out = outPrint()
+
     
     @pyqtSignature("")
     def on_pushButton_clicked(self):
@@ -35,8 +36,16 @@ class RobotInfo(QWidget, Ui_Form):
         """
         Slot documentation goes here.
         """
-        green = int(value*2)
-        red = int(50 + 200 - value*2)
+        
+        value -= 7
+        if value <=0:
+            value = 0
+        if value >= 50:
+            green = 255
+            red = int(510 - (value*2)*2.55)
+        else:
+            red = 255
+            green = int((value*2)*2.55)
         self.progressBar.setStyleSheet("""
         QProgressBar {
         border: 2px solid grey;
@@ -45,7 +54,7 @@ class RobotInfo(QWidget, Ui_Form):
         height: 5px;
         }
         QProgressBar::chunk {
-        background-color: rgb(""" + str(red) + "," + str(green) + """,50);
+        background-color: rgb(""" + str(red) + "," + str(green) + """,0);
         }
         """)
         

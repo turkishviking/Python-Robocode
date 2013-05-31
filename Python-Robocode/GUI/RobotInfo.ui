@@ -45,6 +45,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QToolButton" name="toolButton_2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -65,7 +68,8 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>robotImages/small.png</normaloff>robotImages/small.png</iconset>
+         <normaloff>robotImages/small.png</normaloff>
+         <disabledoff>robotImages/small.png</disabledoff>robotImages/small.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -103,6 +107,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QToolButton" name="toolButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="minimumSize">
         <size>
          <width>30</width>
@@ -123,7 +130,8 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>robotImages/smallRed.png</normaloff>robotImages/smallRed.png</iconset>
+         <normaloff>robotImages/smallRed.png</normaloff>
+         <disabledoff>robotImages/smallRed.png</disabledoff>robotImages/smallRed.png</iconset>
        </property>
        <property name="iconSize">
         <size>
