@@ -31,7 +31,6 @@ class Graph(QGraphicsScene):
         self.deadBots = []
         try:
             posList = random.sample(self.grid, len(botList))
-            self.Parent.battleMenu.close()
             for bot in botList:
                 try:
                     robot = bot(self.sceneRect().size(), self, str(bot))
@@ -39,11 +38,13 @@ class Graph(QGraphicsScene):
                     self.addItem(robot)
                     robot.setPos(posList.pop())
                     self.Parent.addRobotInfo(robot)
-
                 except Exception,  e:
                     print "Problem with bot file '%s': %s" % (bot, str(e))
+            self.Parent.battleMenu.close()
         except ValueError:
             QMessageBox.about(self.Parent, "Alert", "Too many Bots for the map's size!")
+        except AttributeError:
+            pass
 
     def  battleFinished(self):
         print "battle terminated"

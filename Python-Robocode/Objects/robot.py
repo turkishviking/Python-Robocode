@@ -72,18 +72,48 @@ class Robot(QtGui.QGraphicsItemGroup):
         #load radarField
         firstPoint = QtCore.QPointF(x - self.radarWidth/2, y)
         secondPoint = QtCore.QPointF(x + self.radarWidth/2, y)
-        thirdPoint = QtCore.QPointF(x + 2*self.radarWidth, y + 400)
-        fourthPoint = QtCore.QPointF(x - 2*self.radarWidth, y+ 400)
+        thirdPoint = QtCore.QPointF(x + 4*self.radarWidth, y + 700)
+        fourthPoint = QtCore.QPointF(x - 4*self.radarWidth, y+ 700)
         qPointListe = []
         qPointListe.append(firstPoint)
         qPointListe.append(secondPoint)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
-        self.radarField = radarField(qPointListe, self)
+        self.radarField = radarField(qPointListe, self, "poly")
+        
+        #largeRadarField
+        qPointListe.remove(fourthPoint)
+        qPointListe.remove(thirdPoint)
+        thirdPoint = QtCore.QPointF(x + 10*self.radarWidth, y + 400)
+        fourthPoint = QtCore.QPointF(x - 10*self.radarWidth, y+ 400)
+        qPointListe.append(thirdPoint)
+        qPointListe.append(fourthPoint)
+        self.largeRadarField = radarField(qPointListe, self, "poly")
+        
+        #thinRadarField
+        qPointListe.remove(fourthPoint)
+        qPointListe.remove(thirdPoint)
+        thirdPoint = QtCore.QPointF(x + 0.4*self.radarWidth, y + 900)
+        fourthPoint = QtCore.QPointF(x - 0.4*self.radarWidth, y+ 900)
+        qPointListe.append(thirdPoint)
+        qPointListe.append(fourthPoint)
+        self.thinRadarField = radarField(qPointListe, self, "poly")
+        
+        #roundRadarField
+        self.roundRadarField = radarField([0, 0, 300, 300], self, "round")
+        self.addToGroup(self.roundRadarField)
+        self.roundRadarField.setPos(x - self.roundRadarField.boundingRect().width()/2.0 ,  y - self.roundRadarField.boundingRect().height() /2.0)
+        
+        #add to group
         self.addToGroup(self.radarField)
-        self.radarFieldWidth = self.radarField.boundingRect().width()
-        self.radarFieldHeight = self.radarField.boundingRect().height()
-        self.setPos(x - self.radarFieldWidth/2.0 ,  y - self.radarFieldHeight /2.0)
+        self.addToGroup(self.largeRadarField)
+        self.addToGroup(self.thinRadarField)
+        """
+        self.largeRadarField.hide()
+        self.thinRadarField.hide()
+        self.roundRadarField.hide()
+        """
+
         
         #Set the bot color in RGB
         self.setColor(0, 200, 100)
@@ -94,6 +124,8 @@ class Robot(QtGui.QGraphicsItemGroup):
         #set the Origin point for Transformation:
         #radarField
         self.radarField.setTransformOriginPoint(x, y)
+        self.largeRadarField.setTransformOriginPoint(x, y)
+        self.thinRadarField.setTransformOriginPoint(x, y)
         #base
         x = self.baseWidth/2
         y = self.baseHeight/2
@@ -109,12 +141,43 @@ class Robot(QtGui.QGraphicsItemGroup):
 
         
         #add self items in items to avoid collisions
-        self.items = set([self, self.base, self.gun, self.radar, self.radarField])
+        self.items = set([self, self.base, self.gun, self.radar, self.radarField, self.largeRadarField, self.thinRadarField, self.roundRadarField])
         
         #init the subclassed Bot
         self.init()
         
         self.currentAnimation = []
+        
+        
+    def setRadarField(self, form):
+        """
+        if form.lower() == "normal":
+            self.radarField.show()
+            self.largeRadarField.hide()
+            self.thinRadarField.hide()
+            self.roundRadarField.hide()     
+        if form.lower() == "large":
+            self.radarField.hide()
+            self.largeRadarField.show()
+            self.thinRadarField.hide()
+            self.roundRadarField.hide()       
+        if form.lower() == "thin":
+            self.radarField.hide()
+            self.largeRadarField.hide()
+            self.thinRadarField.show()
+            self.roundRadarField.hide()
+        if form.lower() == "round":
+            self.radarField.hide()
+            self.largeRadarField.hide()
+            self.thinRadarField.hide()
+            self.roundRadarField.show()
+        """
+            
+    def setRadarRotation(self, angle):
+        self.radar.setRotation(angle)
+        self.radarField.setRotation(angle)
+        self.largeRadarField.setRotation(angle)
+        self.thinRadarField.setRotation(angle)
         
     def advance(self, i):
         if self.health <= 0:
@@ -155,17 +218,15 @@ class Robot(QtGui.QGraphicsItemGroup):
                 if self.gunLock.lower() == 'base':
                     self.gun.setRotation(angle)
                 if self.radarLock.lower() == 'base':
-                    self.radar.setRotation(angle)
+                    self.setRadarRotation(angle)
                 #gun Rotation
                 angle = self.getGunRotation(command["gunTurn"])
                 self.gun.setRotation(angle)
                 if self.radarLock.lower() == 'gun':
-                    self.radar.setRotation(angle)
-                    self.radarField.setRotation(angle)
+                    self.setRadarRotation(angle)
                 #radar Rotation
                 angle = self.getRadarRotation(command["radarTurn"])
-                self.radar.setRotation(angle)
-                self.radarField.setRotation(angle)
+                self.setRadarRotation(angle)
                 #asynchronous fire
                 if command["fire"] != 0:
                     self.makeBullet(command["fire"] )
@@ -281,6 +342,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     def radarvisible(self, bol):
         self.radarField.setVisible(bol)
+        self.largeRadarField.setVisible(bol)
         
     #------------------------------------------------Bullets---------------------------------------
         

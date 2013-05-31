@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/Python-Robocode/GUI/window.ui'
 #
-# Created: Thu May 30 18:55:35 2013
+# Created: Fri May 31 19:16:56 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!

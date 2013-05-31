@@ -25,6 +25,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.countBattle = 0
+        self.timer = QTimer()
         
     
     @pyqtSignature("")

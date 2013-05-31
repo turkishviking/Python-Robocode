@@ -22,6 +22,8 @@ class Camper(Robot): #Create a Robot
         
         self.lockRadar("gun")
         self.inTheCorner = False
+        
+
     
     def run(self): #main loop to command the bot
         

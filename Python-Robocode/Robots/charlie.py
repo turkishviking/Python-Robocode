@@ -63,6 +63,7 @@ class Charlie(Robot): #Create a Robot
         self.pause(100)
         self.move(-100)
         self.rPrint('ouch! a wall !')
+        self.setRadarField("large")
     
     def onRobotHit(self, robotId): # when My bot hit another
         self.rPrint('collision with:' + str(robotId))

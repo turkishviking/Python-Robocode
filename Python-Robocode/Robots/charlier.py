@@ -63,6 +63,7 @@ class Charlier(Robot): #Create a Robot
         
     def onTargetSpotted(self, botId, botPos):#NECESARY FOR THE GAME
         "when the bot see another one"
+        self.setRadarField("thin")
         self.rPrint("I see the bot:" + str(botId) + "on position: x:" + str(botPos.x()) + " , y:" + str(botPos.y()))
         self.gunTurn(5)
 

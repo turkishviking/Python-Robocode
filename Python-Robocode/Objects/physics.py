@@ -15,7 +15,7 @@ class physics():
         self.currentList = []
         self.animation = animation
 
-        self.step = 7
+        self.step = 5
 
             
     def reverse(self):
