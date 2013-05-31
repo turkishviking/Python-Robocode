@@ -108,11 +108,11 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.addToGroup(self.radarField)
         self.addToGroup(self.largeRadarField)
         self.addToGroup(self.thinRadarField)
-        """
+        
         self.largeRadarField.hide()
         self.thinRadarField.hide()
         self.roundRadarField.hide()
-        """
+        
 
         
         #Set the bot color in RGB
@@ -149,35 +149,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.currentAnimation = []
         
         
-    def setRadarField(self, form):
-        """
-        if form.lower() == "normal":
-            self.radarField.show()
-            self.largeRadarField.hide()
-            self.thinRadarField.hide()
-            self.roundRadarField.hide()     
-        if form.lower() == "large":
-            self.radarField.hide()
-            self.largeRadarField.show()
-            self.thinRadarField.hide()
-            self.roundRadarField.hide()       
-        if form.lower() == "thin":
-            self.radarField.hide()
-            self.largeRadarField.hide()
-            self.thinRadarField.show()
-            self.roundRadarField.hide()
-        if form.lower() == "round":
-            self.radarField.hide()
-            self.largeRadarField.hide()
-            self.thinRadarField.hide()
-            self.roundRadarField.show()
-        """
-            
-    def setRadarRotation(self, angle):
-        self.radar.setRotation(angle)
-        self.radarField.setRotation(angle)
-        self.largeRadarField.setRotation(angle)
-        self.thinRadarField.setRotation(angle)
+
         
     def advance(self, i):
         if self.health <= 0:
@@ -187,7 +159,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         if self.currentAnimation == []:
             try:
                 self.currentAnimation  = self.physics.animation.list.pop()
-                self.rPrint("------------------------------------")
+
             except IndexError:
                 if self.physics.animation.name == "target":
                     try:
@@ -198,7 +170,7 @@ class Robot(QtGui.QGraphicsItemGroup):
                 else:
                     self.stop()
                     self.run()
-                    self.rPrint("--------------RUN-----------------")
+
                     self.physics.reverse()
                     try:
                         self.currentAnimation  = self.physics.animation.list.pop()
@@ -208,7 +180,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         if i == 1:
             try:
                 command = self.currentAnimation.pop() #load animation
-                self.rPrint(command)
+
                 #translation
                 dx, dy= self.getTranslation(command["move"])
                 self.setPos(dx, dy)
@@ -314,7 +286,29 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.maskColor = QtGui.QColor(r, g, b)
         
     #---------------------------------------------RADAR------------------------------------------------
-
+    
+    def setRadarField(self, form):
+        if form.lower() == "normal":
+            self.radarField.show()
+            self.largeRadarField.hide()
+            self.thinRadarField.hide()
+            self.roundRadarField.hide()     
+        if form.lower() == "large":
+            self.radarField.hide()
+            self.largeRadarField.show()
+            self.thinRadarField.hide()
+            self.roundRadarField.hide()       
+        if form.lower() == "thin":
+            self.radarField.hide()
+            self.largeRadarField.hide()
+            self.thinRadarField.show()
+            self.roundRadarField.hide()
+        if form.lower() == "round":
+            self.radarField.hide()
+            self.largeRadarField.hide()
+            self.thinRadarField.hide()
+            self.roundRadarField.show()
+        
         
     def lockRadar(self, part):
         self.radarLock = part
@@ -428,6 +422,12 @@ class Robot(QtGui.QGraphicsItemGroup):
         dy = math.cos(math.radians(angle))*step
         return x+dx, y+dy
         
+    def setRadarRotation(self, angle):
+        self.radar.setRotation(angle)
+        self.radarField.setRotation(angle)
+        self.largeRadarField.setRotation(angle)
+        self.thinRadarField.setRotation(angle)
+        
     def getRotation(self, alpha):
         return self.base.rotation() + alpha
         
@@ -521,7 +521,7 @@ class Robot(QtGui.QGraphicsItemGroup):
             target.robot.currentAnimation  = target.robot.physics.animation.list.pop()
         except:
             pass
-        target.robot.rPrint("---------Target Animation----------")
+
         
     def changeHealth(self, bot, value):
         if bot.health + value>=100:

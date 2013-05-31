@@ -15,7 +15,8 @@ class Charlie(Robot): #Create a Robot
         self.setBulletsColor(0, 200, 100)
         
         #get the map size
-        size = self.getMapSize()
+        size = self.getMapSize() #get the map size
+        self.radarvisible(True) # show the radarField
         
     
     def run(self): #NECESARY FOR THE GAME  main loop to command the bot
@@ -26,9 +27,9 @@ class Charlie(Robot): #Create a Robot
         self.stop()
         """
         the stop command is used to make moving sequences: here the robot will move 90steps and turn 360° at the same time
+        and next, fire
         """
         
-        #self.setGunDirection(40) # set the Gun direction (bottom = 0°)
         
         self.fire(3) # To Fire (power between 1 and 10)
         
@@ -54,6 +55,7 @@ class Charlie(Robot): #Create a Robot
         angle = self.getGunHeading() #Returns the direction that the robot's gun is facing
         angle = self.getHeading() #Returns the direction that the robot is facing
         angle = self.getRadarHeading() #Returns the direction that the robot's radar is facing
+        n = self.getEnemiesLeft() #return the number of enemies alive in the battle
         
     def onHitByRobot(self):
         self.rPrint("damn a bot collided me!")
@@ -66,7 +68,7 @@ class Charlie(Robot): #Create a Robot
         self.setRadarField("large")
     
     def onRobotHit(self, robotId): # when My bot hit another
-        self.rPrint('collision with:' + str(robotId))
+        self.rPrint('collision with:' + str(robotId)) #Print information in the robotMenu (click on the righ panel to see it)
        
     def onHitByBullet(self, bulletBotId, bulletPower): #NECESARY FOR THE GAME
         """ When i'm hit by a bullet"""
@@ -81,6 +83,7 @@ class Charlie(Robot): #Create a Robot
     def onBulletMiss(self, bulletId):#NECESARY FOR THE GAME
         """when my bullet hit a wall"""
         self.rPrint ("the bullet "+ str(bulletId) + " fail")
+        self.pause(10) #wait 10 frames
         
     def onRobotDeath(self):#NECESARY FOR THE GAME
         """When my bot die"""
