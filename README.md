@@ -9,7 +9,7 @@
 
 ####Any help would be welcome!
 
-#####This is a beta version, if you aren't a developer, watch the [Master Branch](https://github.com/turkishviking/Python-Robocode/) for the stable version
+#####This is a beta version, tell me if you watch some bugs
 
 
 
