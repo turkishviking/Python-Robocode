@@ -12,6 +12,9 @@
 
 #####This is a beta version, tell me if you watch some bugs
 
+###### If you want to contribute, I haven't the time yet for developing some base robot( wall runner, coins camper, random move etc...). If you do this, I will be happy to include its into the source code. (Post an issue or make a pull request in this case).
+
+
 
 
 
