@@ -112,6 +112,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         rb.robot = robot
         robot.info = rb
         robot.progressBar = rb.progressBar
+        robot.icon = rb.toolButton
+        robot.icon2 = rb.toolButton_2
         p = self.sceneMenu.addWidget(rb)
         l = (len(self.scene.aliveBots) )
         self.sceneMenu.setSceneRect(0, 0, 170, l*80)

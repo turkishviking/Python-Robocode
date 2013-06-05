@@ -549,7 +549,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.__items.remove(item)
 
     def __death(self):
+        
         try:
+            self.icon.setIcon(QtGui.QIcon(os.getcwd() + "/robotImages/dead.png"))
+            self.icon2.setIcon(QtGui.QIcon(os.getcwd() + "/robotImages/dead.png"))
             self.progressBar.setValue(0)
         except :
             pass
