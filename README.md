@@ -28,9 +28,9 @@
     - [x]  getTargetPosition()
     - [x]  getTargetName()
     - [x]  bulletPower
-    - [x]  on_hit_by_bullet()  -->   Detected but not effective
+    - [x]  on_hit_by_bullet()  
     - [x]  bulletSize
-    - [x]  WallCollision       -->   Detected but not effective
+    - [x]  WallCollision       
     - [x]  MapSize
     - [x]  Number_Of_Enmies_Left()
     - [x]  GameSpeed
@@ -48,4 +48,5 @@
     - [ ]  Add Classe Reference in the wiki
     - [ ]  To prevent bot's to use Sockets, urllib2, and Sub/Multi Processing Module (more safe for users)
     - [x]  Window resizable 
+    - [ ]  Write Calculus in cython (to speed up the code) 
 

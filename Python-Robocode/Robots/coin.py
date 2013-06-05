@@ -15,12 +15,13 @@ class Camper(Robot): #Create a Robot
         self.setRadarColor(200, 100, 0)
         self.setBulletsColor(100, 150, 250)
         
-        self.radarvisible(True) # if True the radar field is visible
+        self.radarVisible(True) # if True the radar field is visible
         
         #get the map size
         size = self.getMapSize()
         
         self.lockRadar("gun")
+        self.setRadarField("thin")
         self.inTheCorner = False
         
 
@@ -33,7 +34,7 @@ class Camper(Robot): #Create a Robot
             a = 90 + math.degrees(math.acos(pos.x()/math.sqrt(pos.x()**2+pos.y()**2)))
             if angle < a:
                 self.turn(a-angle)
-            elif angle > a:
+            elif angle > a-0.5:
                 self.turn(angle-a)
             self.stop()
             self.move(10)
@@ -52,16 +53,16 @@ class Camper(Robot): #Create a Robot
     def sensors(self): 
         pass
         
-    def onRobotHit(self, robotId):
+    def onRobotHit(self, robotId, robotName): # when My bot hit another
         pass
         
-    def onHitByRobot(self):
+    def onHitByRobot(self, robotId, robotName):
         pass
 
-    def onHitByBullet(self, bulletBotId, bulletPower): 
+    def onHitByBullet(self, bulletBotId, bulletBotName, bulletPower): #NECESARY FOR THE GAME
         pass
         
-    def onBulletHit(self, botId, bulletId):
+    def onBulletHit(self, botId, bulletId):#NECESARY FOR THE GAME
         pass
         
     def onBulletMiss(self, bulletId):
@@ -70,17 +71,14 @@ class Camper(Robot): #Create a Robot
     def onRobotDeath(self):
         pass
         
-    def onTargetSpotted(self, botId, botPos):
-        self.gunTurn(5)
-        self.stop()
+    def onTargetSpotted(self, botId, botName, botPos):#NECESARY FOR THE GAME
         if self.inTheCorner:
-            pos = self.getPosition()
-            angle = self.getGunHeading()
-            a = 270+math.degrees(math.acos(pos.x()/math.sqrt(pos.x()**2+pos.y()**2)))
-            if angle < a:
-                self.gunTurn(angle-a)
-            elif angle > a:
-                
-                self.gunTurn(a - angle)
-            self.fire(5)
+            self.fire(2)
+            self.gunTurn(2)
+            self.stop()
+            self.fire(2)
+            self.gunTurn(-4)
+            self.stop()
+            self.fire(2)
+            self.gunTurn(2)
            

@@ -11,7 +11,7 @@ import math
 
 class Bullet(QGraphicsPixmapItem):
     
-    def __init__(self, power, color):
+    def __init__(self, power, color, bot):
         QGraphicsPixmapItem.__init__(self)
         #graphics
         self.maskColor = QtGui.QColor(255, 128, 0)
@@ -32,10 +32,10 @@ class Bullet(QGraphicsPixmapItem):
             bsize = 4
         self.pixmap = self.pixmap.scaled(bsize, bsize)
         self.setPixmap(self.pixmap)
-        
-    def init(self, pos, bot, angle, scene):
-
         self.robot = bot
+        
+    def init(self, pos, angle, scene):
+
         self.angle = angle
         self.setPos(pos)
         self.scene = scene
@@ -63,7 +63,7 @@ class Bullet(QGraphicsPixmapItem):
             if x < 0 or y < 0 or x > self.scene.width or y > self.scene.height:
                 self.robot.onBulletMiss(id(self))
                 self.scene.removeItem(self)
-                self.robot.items.remove(self)
+                self.robot.removeMyProtectedItem(self)
 
         
             

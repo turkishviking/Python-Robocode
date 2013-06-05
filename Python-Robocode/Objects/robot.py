@@ -12,26 +12,25 @@ from bullet import Bullet
 from radarField import radarField
 from animation import animation
 
+import time
+
 class Robot(QtGui.QGraphicsItemGroup):
     
     def __init__(self,  mapSize, parent, repr):
         QtGui.QGraphicsItemGroup.__init__(self)
         #Attributes
-        self.mapSize = mapSize
-        self.parent = parent
-        self.health = 100
-        self.repr = repr
-        self.outMsg = []
-        self.isReading = False
-        self.countFrame = 0
-        self.gunLock = "free"
-        self.radarLock = "Free"
-        self.lockTarget = True
+        self.__mapSize = mapSize
+        self.__parent = parent
+        self.__health = 100
+        self.__repr = repr
+        self.__gunLock = "free"
+        self.__radarLock = "Free"
+
         
         #animation
-        self.runAnimation = animation("run")
-        self.targetAnimation = animation("target")
-        self.physics = physics(self.runAnimation)
+        self.__runAnimation = animation("run")
+        self.__targetAnimation = animation("target")
+        self.__physics = physics(self.__runAnimation)
         
         
         #graphics
@@ -40,78 +39,78 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.radarMaskColor = QtGui.QColor(0, 255, 255)
         
         #load img
-        self.base = QtGui.QGraphicsPixmapItem()
-        self.base.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/baseGrey.png")
-        self.base.setPixmap(self.base.pixmap)
-        self.addToGroup(self.base)
-        self.baseWidth = self.base.boundingRect().width()
-        self.baseHeight = self.base.boundingRect().height()
+        self.__base = QtGui.QGraphicsPixmapItem()
+        self.__base.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/baseGrey.png")
+        self.__base.setPixmap(self.__base.pixmap)
+        self.addToGroup(self.__base)
+        self.__baseWidth = self.__base.boundingRect().width()
+        self.__baseHeight = self.__base.boundingRect().height()
         
         #load gun img
-        self.gun = QtGui.QGraphicsPixmapItem()
-        self.gun.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/gunGrey.png")
-        self.gun.setPixmap(self.gun.pixmap)
-        self.addToGroup(self.gun)
-        self.gunWidth = self.gun.boundingRect().width()
-        self.gunHeight = self.gun.boundingRect().height()
+        self.__gun = QtGui.QGraphicsPixmapItem()
+        self.__gun.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/gunGrey.png")
+        self.__gun.setPixmap(self.__gun.pixmap)
+        self.addToGroup(self.__gun)
+        self.__gunWidth = self.__gun.boundingRect().width()
+        self.__gunHeight = self.__gun.boundingRect().height()
         #gun position
-        x = self.base.boundingRect().center().x()
-        y = self.base.boundingRect().center().y()
-        self.gun.setPos(x - self.gunWidth/2.0 ,  y - self.gunHeight /2.0)
+        x = self.__base.boundingRect().center().x()
+        y = self.__base.boundingRect().center().y()
+        self.__gun.setPos(x - self.__gunWidth/2.0 ,  y - self.__gunHeight /2.0)
         
         #load radar img
-        self.radar = QtGui.QGraphicsPixmapItem()
-        self.radar.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/radar.png")
-        self.radar.setPixmap(self.radar.pixmap)
-        self.addToGroup(self.radar)
-        self.radarWidth = self.radar.boundingRect().width()
-        self.radarHeight = self.radar.boundingRect().height()
+        self.__radar = QtGui.QGraphicsPixmapItem()
+        self.__radar.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/radar.png")
+        self.__radar.setPixmap(self.__radar.pixmap)
+        self.addToGroup(self.__radar)
+        self.__radarWidth = self.__radar.boundingRect().width()
+        self.__radarHeight = self.__radar.boundingRect().height()
         #radar position
-        self.radar.setPos(x - self.radarWidth/2.0 ,  y - self.radarHeight /2.0)
+        self.__radar.setPos(x - self.__radarWidth/2.0 ,  y - self.__radarHeight /2.0)
         
         #load radarField
-        firstPoint = QtCore.QPointF(x - self.radarWidth/2, y)
-        secondPoint = QtCore.QPointF(x + self.radarWidth/2, y)
-        thirdPoint = QtCore.QPointF(x + 4*self.radarWidth, y + 700)
-        fourthPoint = QtCore.QPointF(x - 4*self.radarWidth, y+ 700)
+        firstPoint = QtCore.QPointF(x - self.__radarWidth/2, y)
+        secondPoint = QtCore.QPointF(x + self.__radarWidth/2, y)
+        thirdPoint = QtCore.QPointF(x + 4*self.__radarWidth, y + 700)
+        fourthPoint = QtCore.QPointF(x - 4*self.__radarWidth, y+ 700)
         qPointListe = []
         qPointListe.append(firstPoint)
         qPointListe.append(secondPoint)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
-        self.radarField = radarField(qPointListe, self, "poly")
+        self.__radarField = radarField(qPointListe, self, "poly")
         
-        #largeRadarField
+        #__largeRadarField
         qPointListe.remove(fourthPoint)
         qPointListe.remove(thirdPoint)
-        thirdPoint = QtCore.QPointF(x + 10*self.radarWidth, y + 400)
-        fourthPoint = QtCore.QPointF(x - 10*self.radarWidth, y+ 400)
+        thirdPoint = QtCore.QPointF(x + 10*self.__radarWidth, y + 400)
+        fourthPoint = QtCore.QPointF(x - 10*self.__radarWidth, y+ 400)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
-        self.largeRadarField = radarField(qPointListe, self, "poly")
+        self.__largeRadarField = radarField(qPointListe, self, "poly")
         
         #thinRadarField
         qPointListe.remove(fourthPoint)
         qPointListe.remove(thirdPoint)
-        thirdPoint = QtCore.QPointF(x + 0.4*self.radarWidth, y + 900)
-        fourthPoint = QtCore.QPointF(x - 0.4*self.radarWidth, y+ 900)
+        thirdPoint = QtCore.QPointF(x + 0.4*self.__radarWidth, y + 900)
+        fourthPoint = QtCore.QPointF(x - 0.4*self.__radarWidth, y+ 900)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
-        self.thinRadarField = radarField(qPointListe, self, "poly")
+        self.__thinRadarField = radarField(qPointListe, self, "poly")
         
         #roundRadarField
-        self.roundRadarField = radarField([0, 0, 300, 300], self, "round")
-        self.addToGroup(self.roundRadarField)
-        self.roundRadarField.setPos(x - self.roundRadarField.boundingRect().width()/2.0 ,  y - self.roundRadarField.boundingRect().height() /2.0)
+        self.__roundRadarField = radarField([0, 0, 300, 300], self, "round")
+        self.addToGroup(self.__roundRadarField)
+        self.__roundRadarField.setPos(x - self.__roundRadarField.boundingRect().width()/2.0 ,  y - self.__roundRadarField.boundingRect().height() /2.0)
         
         #add to group
-        self.addToGroup(self.radarField)
-        self.addToGroup(self.largeRadarField)
-        self.addToGroup(self.thinRadarField)
+        self.addToGroup(self.__radarField)
+        self.addToGroup(self.__largeRadarField)
+        self.addToGroup(self.__thinRadarField)
         
-        self.largeRadarField.hide()
-        self.thinRadarField.hide()
-        self.roundRadarField.hide()
+        self.__largeRadarField.hide()
+        self.__thinRadarField.hide()
+        self.__roundRadarField.hide()
         
 
         
@@ -123,82 +122,83 @@ class Robot(QtGui.QGraphicsItemGroup):
         
         #set the Origin point for Transformation:
         #radarField
-        self.radarField.setTransformOriginPoint(x, y)
-        self.largeRadarField.setTransformOriginPoint(x, y)
-        self.thinRadarField.setTransformOriginPoint(x, y)
+        self.__radarField.setTransformOriginPoint(x, y)
+        self.__largeRadarField.setTransformOriginPoint(x, y)
+        self.__thinRadarField.setTransformOriginPoint(x, y)
         #base
-        x = self.baseWidth/2
-        y = self.baseHeight/2
-        self.base.setTransformOriginPoint(x, y)
+        x = self.__baseWidth/2
+        y = self.__baseHeight/2
+        self.__base.setTransformOriginPoint(x, y)
         #gun
-        x = self.gunWidth/2
-        y = self.gunHeight /2
-        self.gun.setTransformOriginPoint(x, y)
+        x = self.__gunWidth/2
+        y = self.__gunHeight /2
+        self.__gun.setTransformOriginPoint(x, y)
         #radar
-        x = self.radarWidth/2
-        y = self.radarHeight /2
-        self.radar.setTransformOriginPoint(x, y)
+        x = self.__radarWidth/2
+        y = self.__radarHeight /2
+        self.__radar.setTransformOriginPoint(x, y)
 
         
         #add self items in items to avoid collisions
-        self.items = set([self, self.base, self.gun, self.radar, self.radarField, self.largeRadarField, self.thinRadarField, self.roundRadarField])
+        self.__items = set([self, self.__base, self.__gun, self.__radar, self.__radarField, self.__largeRadarField, self.__thinRadarField, self.__roundRadarField])
         
         #init the subclassed Bot
         self.init()
         
-        self.currentAnimation = []
+        self.__currentAnimation = []
         
-        
+        self.a = time.time()
 
         
     def advance(self, i):
-        if self.health <= 0:
-            self.death()
-        self.countFrame +=1
+        if i ==1:
+            print time.time() - self.a
+            self.a = time.time()
+        if self.__health <= 0:
+            self.__death()
         
-        if self.currentAnimation == []:
+        if self.__currentAnimation == []:
             try:
-                self.currentAnimation  = self.physics.animation.list.pop()
+                self.__currentAnimation  = self.__physics.animation.list.pop()
 
             except IndexError:
-                if self.physics.animation.name == "target":
+                if self.__physics.animation.name == "target":
                     try:
-                        self.physics.animation = self.runAnimation
-                        self.currentAnimation  = self.physics.animation.list.pop()
+                        self.__physics.animation = self.__runAnimation
+                        self.__currentAnimation  = self.__physics.animation.list.pop()
                     except IndexError:
                         pass
                 else:
                     self.stop()
                     self.run()
-
-                    self.physics.reverse()
+                    self.__physics.reverse()
                     try:
-                        self.currentAnimation  = self.physics.animation.list.pop()
+                        self.__currentAnimation  = self.__physics.animation.list.pop()
                     except:
                         pass
                     
-        if i == 1:
+        if i ==1:
             try:
-                command = self.currentAnimation.pop() #load animation
+                command = self.__currentAnimation.pop() #load animation
 
                 #translation
-                dx, dy= self.getTranslation(command["move"])
+                dx, dy= self.__getTranslation(command["move"])
                 self.setPos(dx, dy)
                 #rotation
-                angle = self.getRotation(command["turn"])
-                self.base.setRotation(angle)
-                if self.gunLock.lower() == 'base':
-                    self.gun.setRotation(angle)
-                if self.radarLock.lower() == 'base':
-                    self.setRadarRotation(angle)
+                angle = self.__getRotation(command["turn"])
+                self.__base.setRotation(angle)
+                if self.__gunLock.lower() == 'base':
+                    self.__gun.setRotation(angle)
+                if self.__radarLock.lower() == 'base':
+                    self.__setRadarRotation(angle)
                 #gun Rotation
-                angle = self.getGunRotation(command["gunTurn"])
-                self.gun.setRotation(angle)
-                if self.radarLock.lower() == 'gun':
-                    self.setRadarRotation(angle)
+                angle = self.__getGunRotation(command["gunTurn"])
+                self.__gun.setRotation(angle)
+                if self.__radarLock.lower() == 'gun':
+                    self.__setRadarRotation(angle)
                 #radar Rotation
-                angle = self.getRadarRotation(command["radarTurn"])
-                self.setRadarRotation(angle)
+                angle = self.__getRadarRotation(command["radarTurn"])
+                self.__setRadarRotation(angle)
                 #asynchronous fire
                 if command["fire"] != 0:
                     self.makeBullet(command["fire"] )
@@ -211,21 +211,21 @@ class Robot(QtGui.QGraphicsItemGroup):
                 
                 
             #collisions
-            for item in set(self.base.collidingItems(1)) - self.items:
+            for item in set(self.__base.collidingItems(1)) - self.__items:
                 if isinstance(item, QtGui.QGraphicsRectItem):
                     #wall Collision
-                    self.wallRebound(item)
+                    self.__wallRebound(item)
                 elif isinstance(item, Robot):
-                    if item.base.collidesWithItem(self.base):
+                    if item.__base.collidesWithItem(self.__base):
                         #robot Collision
-                        self.robotRebound(item)
+                        self.__robotRebound(item)
                 elif isinstance(item, Bullet):
                     #bullet colision
-                    self.bulletRebound(item)
+                    self.__bulletRebound(item)
                 elif isinstance(item, radarField):
-                    if item.robot.physics.animation.name != "target":
+                    if item.robot.__physics.animation.name != "target":
                         #targetSpotted
-                        self.targetSeen(item)
+                        self.__targetSeen(item)
         
      ### THESE ARE THE FUNCTIONS ACCESSABLE FROM OUTSIDE ###   
      
@@ -234,21 +234,24 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if angle < 0:
             s = -1
-        steps = int(s*angle/self.physics.step)
-        a = angle%self.physics.step
+        steps = int(s*angle/self.__physics.step)
+        a = angle%self.__physics.step
         if a != 0:
-            self.physics.gunTurn.append(s*a)
+            self.__physics.gunTurn.append(s*a)
         for i in range(steps):
-            self.physics.gunTurn.append(s*self.physics.step)
+            self.__physics.gunTurn.append(s*self.__physics.step)
+            
+    def lockGun(self, part):
+        self.__gunLock = part
          
     def setGunColor(self, r, g, b):
         color = QtGui.QColor(r, g, b)
-        mask = self.gun.pixmap.createMaskFromColor(self.gunMaskColor,  1)
-        p = QtGui.QPainter(self.gun.pixmap)
+        mask = self.__gun.pixmap.createMaskFromColor(self.gunMaskColor,  1)
+        p = QtGui.QPainter(self.__gun.pixmap)
         p.setPen(QtGui.QColor(r, g, b))
-        p.drawPixmap(self.gun.pixmap.rect(), mask, mask.rect())
+        p.drawPixmap(self.__gun.pixmap.rect(), mask, mask.rect())
         p.end()
-        self.gun.setPixmap(self.gun.pixmap)
+        self.__gun.setPixmap(self.__gun.pixmap)
         self.gunMaskColor = QtGui.QColor(r, g, b)
         
     #----------------------------------------------------------Base-----------------------------------------------------
@@ -257,114 +260,116 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if distance < 0:
             s = -1
-        steps = s*distance/self.physics.step
-        d = distance%self.physics.step
+        steps = s*distance/self.__physics.step
+        d = distance%self.__physics.step
         if d != 0:
-            self.physics.move.append(s*d)
+            self.__physics.move.append(s*d)
         for i in range(steps):
-            self.physics.move.append(s*self.physics.step)
+            self.__physics.move.append(s*self.__physics.step)
                 
     def turn(self, angle):
         s = 1
         if angle < 0:
             s = -1
-        steps = int(s*angle/self.physics.step)
-        a = angle%self.physics.step
+        steps = int(s*angle/self.__physics.step)
+        a = angle%self.__physics.step
         if a != 0:
-            self.physics.turn.append(s*a)
+            self.__physics.turn.append(s*a)
         for i in range(steps):
-            self.physics.turn.append(s*self.physics.step)
+            self.__physics.turn.append(s*self.__physics.step)
             
     def setColor(self, r, g, b):
         color = QtGui.QColor(r, g, b)
-        mask = self.base.pixmap.createMaskFromColor(self.maskColor,  1)
-        p = QtGui.QPainter(self.base.pixmap)
+        mask = self.__base.pixmap.createMaskFromColor(self.maskColor,  1)
+        p = QtGui.QPainter(self.__base.pixmap)
         p.setPen(QtGui.QColor(r, g, b))
-        p.drawPixmap(self.base.pixmap.rect(), mask, mask.rect())
+        p.drawPixmap(self.__base.pixmap.rect(), mask, mask.rect())
         p.end()
-        self.base.setPixmap(self.base.pixmap)
+        self.__base.setPixmap(self.__base.pixmap)
         self.maskColor = QtGui.QColor(r, g, b)
         
     #---------------------------------------------RADAR------------------------------------------------
     
     def setRadarField(self, form):
         if form.lower() == "normal":
-            self.radarField.show()
-            self.largeRadarField.hide()
-            self.thinRadarField.hide()
-            self.roundRadarField.hide()     
+            self.__radarField.show()
+            self.__largeRadarField.hide()
+            self.__thinRadarField.hide()
+            self.__roundRadarField.hide()     
         if form.lower() == "large":
-            self.radarField.hide()
-            self.largeRadarField.show()
-            self.thinRadarField.hide()
-            self.roundRadarField.hide()       
+            self.__radarField.hide()
+            self.__largeRadarField.show()
+            self.__thinRadarField.hide()
+            self.__roundRadarField.hide()       
         if form.lower() == "thin":
-            self.radarField.hide()
-            self.largeRadarField.hide()
-            self.thinRadarField.show()
-            self.roundRadarField.hide()
+            self.__radarField.hide()
+            self.__largeRadarField.hide()
+            self.__thinRadarField.show()
+            self.__roundRadarField.hide()
         if form.lower() == "round":
-            self.radarField.hide()
-            self.largeRadarField.hide()
-            self.thinRadarField.hide()
-            self.roundRadarField.show()
+            self.__radarField.hide()
+            self.__largeRadarField.hide()
+            self.__thinRadarField.hide()
+            self.__roundRadarField.show()
         
         
     def lockRadar(self, part):
-        self.radarLock = part
+        self.__radarLock = part
         
     def radarTurn(self, angle):
         s = 1
         if angle < 0:
             s = -1
-        steps = int(s*angle/self.physics.step)
-        a = angle%self.physics.step
+        steps = int(s*angle/self.__physics.step)
+        a = angle%self.__physics.step
         if a != 0:
-            self.physics.radarTurn.append(s*a)
+            self.__physics.radarTurn.append(s*a)
         for i in range(steps):
-            self.physics.radarTurn.append(s*self.physics.step)
+            self.__physics.radarTurn.append(s*self.__physics.step)
         
     def setRadarColor(self, r, g, b):
         color = QtGui.QColor(r, g, b)
-        mask = self.radar.pixmap.createMaskFromColor(self.radarMaskColor,  1)
-        p = QtGui.QPainter(self.radar.pixmap)
+        mask = self.__radar.pixmap.createMaskFromColor(self.radarMaskColor,  1)
+        p = QtGui.QPainter(self.__radar.pixmap)
         p.setPen(QtGui.QColor(r, g, b))
-        p.drawPixmap(self.radar.pixmap.rect(), mask, mask.rect())
+        p.drawPixmap(self.__radar.pixmap.rect(), mask, mask.rect())
         p.end()
-        self.radar.setPixmap(self.radar.pixmap)
+        self.__radar.setPixmap(self.__radar.pixmap)
         self.radarMaskColor = QtGui.QColor(r, g, b)
         
-    def radarvisible(self, bol):
-        self.radarField.setVisible(bol)
-        self.largeRadarField.setVisible(bol)
+    def radarVisible(self, bol):
+        self.__radarField.setVisible(bol)
+        self.__roundRadarField.setVisible(bol)
+        self.__thinRadarField.setVisible(bol)
+        self.__largeRadarField.setVisible(bol)
         
     #------------------------------------------------Bullets---------------------------------------
         
     def fire(self, power):
         #asynchronous fire
         self.stop()
-        bullet = Bullet(power, self.bulletColor)
-        self.physics.fire.append(bullet)
-        self.items.add(bullet)
-        self.parent.addItem(bullet)
+        bullet = Bullet(power, self.bulletColor, self)
+        self.__physics.fire.append(bullet)
+        self.__items.add(bullet)
+        self.__parent.addItem(bullet)
         bullet.hide()
         return id(bullet)
 
     def makeBullet(self, bullet):
         bullet.show()
         pos = self.pos()
-        angle = self.gun.rotation()
+        angle = self.__gun.rotation()
         #to find the initial position
-        x = pos.x() + self.baseWidth/2.0
-        y = pos.y() + self.baseHeight/2.0
-        dx =  - math.sin(math.radians(angle))*self.gunWidth/2.0
-        dy = math.cos(math.radians(angle))*self.gunHeight/2.0
+        x = pos.x() + self.__baseWidth/2.0
+        y = pos.y() + self.__baseHeight/2.0
+        dx =  - math.sin(math.radians(angle))*self.__gunWidth/2.0
+        dy = math.cos(math.radians(angle))*self.__gunHeight/2.0
         pos.setX(x+dx)
         pos.setY(y+dy)
         bot = self
-        bullet.init(pos, bot, angle, self.parent)
+        bullet.init(pos, angle, self.__parent)
 
-        self.changeHealth(self, -bullet.power) 
+        self.__changeHealth(self, -bullet.power) 
         return id(bullet)
         
     def setBulletsColor(self, r, g, b):
@@ -372,35 +377,39 @@ class Robot(QtGui.QGraphicsItemGroup):
         
     #---------------------------------------General Methods---------------------------------------
     def stop(self):
-        self.physics.newAnimation()
+        self.__physics.newAnimation()
         
     def getMapSize(self):
-        return self.mapSize
+        return self.__mapSize
             
     def getPosition(self):
         p = self.pos()
-        r = self.base.boundingRect()
+        r = self.__base.boundingRect()
         return QtCore.QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
         
     def getGunHeading(self):
-        angle = self.gun.rotation()
+        angle = self.__gun.rotation()
         if angle > 360:
             a = int(angle) / 360
             angle = angle - (360*a)
         return angle
         
     def getHeading(self):
-        return self.base.rotation()
+        return self.__base.rotation()
         
     def getRadarHeading(self):
-        return self.gun.rotation()
+        return self.__gun.rotation()
         
     def reset(self):
-        self.physics.reset()
-        self.currentAnimation = []
+        self.__physics.reset()
+        self.__currentAnimation = []
         
     def getEnemiesLeft(self):
-        return len(self.parent.aliveBots)
+        l = []
+        for bot in self.__parent.aliveBots:
+            dic = {"id":id(bot), "name":bot.__repr__()}
+            l.append(dic)
+        return l
         
     def rPrint(self, msg):
         self.info.out.add(str(msg))
@@ -408,142 +417,149 @@ class Robot(QtGui.QGraphicsItemGroup):
     def pause(self, duration):
         self.stop()
         for i in range(int(duration)):
-            self.physics.move.append(0)
+            self.__physics.move.append(0)
         self.stop()
-    ###end of functions accessable from robot###
+    ###end of functions accessable from outside###
             
-    # Calculus
-    def getTranslation(self, step):
-        angle = self.base.rotation()
+    # Calculus & Private Methods
+    def __getTranslation(self, step):
+        angle = self.__base.rotation()
         pos = self.pos()
         x = pos.x()
         y = pos.y()
         dx = - math.sin(math.radians(angle))*step
         dy = math.cos(math.radians(angle))*step
+        print dx, dy
         return x+dx, y+dy
         
-    def setRadarRotation(self, angle):
-        self.radar.setRotation(angle)
-        self.radarField.setRotation(angle)
-        self.largeRadarField.setRotation(angle)
-        self.thinRadarField.setRotation(angle)
+    def __setRadarRotation(self, angle):
+        self.__radar.setRotation(angle)
+        self.__radarField.setRotation(angle)
+        self.__largeRadarField.setRotation(angle)
+        self.__thinRadarField.setRotation(angle)
         
-    def getRotation(self, alpha):
-        return self.base.rotation() + alpha
+    def __getRotation(self, alpha):
+        return self.__base.rotation() + alpha
         
-    def getGunRotation(self, alpha):
-        return self.gun.rotation() + alpha
+    def __getGunRotation(self, alpha):
+        return self.__gun.rotation() + alpha
         
-    def getRadarRotation(self,  alpha):
-        return self.radar.rotation() + alpha
+    def __getRadarRotation(self,  alpha):
+        return self.__radar.rotation() + alpha
     
-    def wallRebound(self, item):
+    def __wallRebound(self, item):
         self.reset()
         if item.name == 'left':
-            x = self.physics.step*1.1
+            x = self.__physics.step*1.1
             y = 0
         elif item.name == 'right':
-            x = - self.physics.step*1.1
+            x = - self.__physics.step*1.1
             y = 0
         elif item.name == 'top':
             x = 0
-            y = self.physics.step*1.1
+            y = self.__physics.step*1.1
         elif item.name == 'bottom':
             x = 0
-            y = - self.physics.step*1.1
+            y = - self.__physics.step*1.1
         self.setPos(self.pos().x() + x, self.pos().y() + y)
-        self.changeHealth(self,  -1)
+        self.__changeHealth(self,  -1)
         self.stop()
         self.onHitWall()
-        animation = self.physics.makeAnimation()
+        animation = self.__physics.makeAnimation()
         if animation != []:
-            self.currentAnimation = animation
+            self.__currentAnimation = animation
         
        
         
-    def robotRebound(self, robot):
+    def __robotRebound(self, robot):
         self.reset()
         robot.reset()
-        angle = self.base.rotation()
+        angle = self.__base.rotation()
         pos = self.pos()
         x = pos.x()
         y = pos.y()
-        dx = - math.sin(math.radians(angle))*self.physics.step*1.1
-        dy = math.cos(math.radians(angle))*self.physics.step*1.1
+        dx = - math.sin(math.radians(angle))*self.__physics.step*1.1
+        dy = math.cos(math.radians(angle))*self.__physics.step*1.1
         self.setPos(x-dx, y-dy)
         pos = robot.pos()
         x = pos.x()
         y = pos.y()
         robot.setPos(x+dx, y+dy)
-        self.changeHealth(robot,  -1)
-        self.changeHealth(self,  -1)
+        self.__changeHealth(robot,  -1)
+        self.__changeHealth(self,  -1)
         self.stop()
-        self.onRobotHit(id(robot))
-        animation = self.physics.makeAnimation()
+        self.onRobotHit(id(robot), robot.__repr__())
+        animation = self.__physics.makeAnimation()
         if animation != []:
-            self.currentAnimation = animation
+            self.__currentAnimation = animation
         robot.stop()
-        robot.onHitByRobot()
-        animation = robot.physics.makeAnimation()
+        robot.onHitByRobot(id(self), self.__repr__())
+        animation = robot.__physics.makeAnimation()
         if animation != []:
-            robot.currentAnimation = animation
+            robot.__currentAnimation = animation
 
         
         
-    def bulletRebound(self, bullet):
-        self.changeHealth(self,  - bullet.power)
+    def __bulletRebound(self, bullet):
+        self.__changeHealth(self,  - bullet.power)
         try:
-            if bullet.robot in self.parent.aliveBots:
-                self.changeHealth(bullet.robot,   bullet.power)
+            if bullet.robot in self.__parent.aliveBots:
+                self.__changeHealth(bullet.robot,   bullet.power)
             self.stop()
-            self.onHitByBullet(id(bullet.robot), bullet.power)
-            animation = self.physics.makeAnimation()
+            self.onHitByBullet(id(bullet.robot), bullet.robot.__repr__(), bullet.power)
+            animation = self.__physics.makeAnimation()
             if animation != []:
-                self.currentAnimation = animation
+                self.__currentAnimation = animation
             bullet.robot.stop()
             bullet.robot.onBulletHit(id(self), id(bullet))
-            animation = bullet.robot.physics.makeAnimation()
+            animation = bullet.robot.__physics.makeAnimation()
             if animation != []:
-                bullet.robot.currentAnimation = animation
-            self.parent.removeItem(bullet)
+                bullet.robot.__currentAnimation = animation
+            self.__parent.removeItem(bullet)
         except:
             pass
         
  
-    def targetSeen(self, target):
+    def __targetSeen(self, target):
         self.stop()
-        target.robot.physics.animation = target.robot.targetAnimation
-        target.robot.physics.reset()
-        target.robot.onTargetSpotted(id(self), self.getPosition())
-        target.robot.physics.newAnimation()
-        target.robot.physics.reverse()
+        anim = target.robot.__currentAnimation
+        target.robot.__physics.animation = target.robot.__targetAnimation
+        target.robot.__physics.reset()
+        target.robot.onTargetSpotted(id(self), self.__repr__(), self.getPosition())
+        target.robot.__physics.newAnimation()
+        target.robot.__physics.reverse()
         try:
-            target.robot.currentAnimation  = target.robot.physics.animation.list.pop()
+            target.robot.__currentAnimation  = target.robot.__physics.animation.list.pop()
         except:
-            pass
+            target.robot.__physics.animation = target.robot.__runAnimation
+            target.robot.__currentAnimation =  anim
 
         
-    def changeHealth(self, bot, value):
-        if bot.health + value>=100:
-            bot.health = 100
+    def __changeHealth(self, bot, value):
+        if bot.__health + value>=100:
+            bot.__health = 100
         else:
-            bot.health = bot.health + value
+            bot.__health = bot.__health + value
         try:
-            bot.progressBar.setValue(bot.health)
+            bot.progressBar.setValue(bot.__health)
         except:
             pass
+            
+    def removeMyProtectedItem(self, item):
+        self.__items.remove(item)
 
-    def death(self):
+    def __death(self):
         try:
             self.progressBar.setValue(0)
         except :
             pass
-        self.parent.deadBots.append(self)
-        self.parent.aliveBots.remove(self)
+        self.__parent.deadBots.append(self)
+        self.__parent.aliveBots.remove(self)
         self.onRobotDeath()
-        self.parent.removeItem(self)
-        if  len(self.parent.aliveBots) <= 1:
-            self.parent.battleFinished()
+        self.__parent.removeItem(self)
+        if  len(self.__parent.aliveBots) <= 1:
+            self.__parent.battleFinished()
             
     def __repr__(self):
-        return self.repr.replace("<class '", "").replace("'>", "")
+        repr = self.__repr.split(".")
+        return repr[1].replace("'>", "")

@@ -13,8 +13,8 @@ class Charlier(Robot): #Create a Robot
         self.setGunColor(200, 200, 0)
         self.setRadarColor(255, 60, 0)
         self.setBulletsColor(255, 150, 150)
-        
-        self.radarvisible(True) # if True the radar field is visible
+
+        self.radarVisible(True) # if True the radar field is visible
         
         #get the map size
         size = self.getMapSize()
@@ -39,13 +39,13 @@ class Charlier(Robot): #Create a Robot
     def sensors(self): #NECESARY FOR THE GAME
         pass
         
-    def onRobotHit(self, robotId):
+    def onRobotHit(self, robotId, robotName): # when My bot hit another
         self.rPrint('collision with:' + str(robotId))
         
-    def onHitByRobot(self):
+    def onHitByRobot(self, robotId, robotName):
         self.rPrint("damn a bot collided me!")
 
-    def onHitByBullet(self, bulletBotId, bulletPower): #NECESARY FOR THE GAME
+    def onHitByBullet(self, bulletBotId, bulletBotName, bulletPower): #NECESARY FOR THE GAME
         """ When i'm hit by a bullet"""
         self.rPrint ("hit by " + str(bulletBotId) + "with power:" +str( bulletPower))
         
@@ -61,7 +61,7 @@ class Charlier(Robot): #Create a Robot
         """When my bot die"""
         self.rPrint ("damn I'm Dead")
         
-    def onTargetSpotted(self, botId, botPos):#NECESARY FOR THE GAME
+    def onTargetSpotted(self, botId, botName, botPos):#NECESARY FOR THE GAME
         "when the bot see another one"
         self.setRadarField("thin")
         self.rPrint("I see the bot:" + str(botId) + "on position: x:" + str(botPos.x()) + " , y:" + str(botPos.y()))
