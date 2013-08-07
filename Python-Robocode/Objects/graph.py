@@ -5,7 +5,6 @@ from PyQt4.QtGui import QGraphicsScene,  QMessageBox,  QBrush, QColor, QPixmap, 
 from PyQt4.QtCore import SIGNAL,  QPointF
 from PyQt4 import QtCore,  Qt
 from robot import Robot
-from wall import Wall
 import time,  os,  random
 from outPrint import outPrint
 
