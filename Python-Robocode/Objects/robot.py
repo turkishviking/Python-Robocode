@@ -501,10 +501,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         
         
     def __bulletRebound(self, bullet):
-        self.__changeHealth(self,  - bullet.power)
+        self.__changeHealth(self,  - 3*bullet.power)
         try:
             if bullet.robot in self.__parent.aliveBots:
-                self.__changeHealth(bullet.robot,   bullet.power)
+                self.__changeHealth(bullet.robot,   2*bullet.power)
             self.stop()
             self.onHitByBullet(id(bullet.robot), bullet.robot.__repr__(), bullet.power)
             animation = self.__physics.makeAnimation()
