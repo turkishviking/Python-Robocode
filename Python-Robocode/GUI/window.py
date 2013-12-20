@@ -13,6 +13,7 @@ from battle import Battle
 import os,  pickle
 from robot import Robot
 from RobotInfo import RobotInfo
+from statistic import statistic
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -26,6 +27,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.countBattle = 0
         self.timer = QTimer()
+        self.tableWidget.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+        self.tableWidget.hide()
         
     
     @pyqtSignature("")
@@ -33,6 +36,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         """
         Start the last battle
         """
+        
         with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
             unpickler = pickle.Unpickler(file)
             dico = unpickler.load()
@@ -41,9 +45,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setUpBattle(dico["width"] , dico["height"], dico["botList"] )
         
     def setUpBattle(self, width, height, botList):
+        self.tableWidget.clearContents()
+        self.tableWidget.hide()
+        self.graphicsView.show()
         self.width = width
         self.height = height
         self.botList = botList
+        self.statisticDico={}
+        for bot in botList:
+            self.statisticDico[self.repres(bot)] = statistic()
         self.startBattle()
         
     def startBattle(self):
@@ -122,8 +132,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def chooseAction(self):
         if self.countBattle >= self.spinBox.value():
             "Menu Statistic"
+            self.graphicsView.hide()
+            self.tableWidget.show()
+            self.tableWidget.setRowCount(len(self.statisticDico))
+            i = 0
+            for key, value in self.statisticDico.items():
+                self.tableWidget.setItem(i, 0,  QtGui.QTableWidgetItem(key))
+                self.tableWidget.setItem(i, 1,  QtGui.QTableWidgetItem(str(value.first)))
+                self.tableWidget.setItem(i, 2,  QtGui.QTableWidgetItem(str(value.second)))
+                self.tableWidget.setItem(i, 3,  QtGui.QTableWidgetItem(str(value.third)))
+                self.tableWidget.setItem(i, 4,  QtGui.QTableWidgetItem(str(value.points)))
+               
+                i += 1
+                
+                
             self.countBattle = 0
             self.timer.stop()
         else:
             self.startBattle()
             
+    def repres(self, bot):
+        repres = repr(bot).split(".")
+        return repres[1].replace("'>", "")

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '/home/charlie/python/PyQt-Robocode/Python-Robocode/GUI/window.ui'
+# Form implementation generated from reading ui file '/home/charlie/Documents/Python/RobotCode/PyQt-Robocode/Python-Robocode/GUI/window.ui'
 #
-# Created: Fri May 31 19:16:56 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Fri Dec 20 17:46:14 2013
+#      by: PyQt4 UI code generator 4.10
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -29,6 +38,23 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         self.verticalLayout_3 = QtGui.QVBoxLayout()
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
+        self.tableWidget = QtGui.QTableWidget(self.centralwidget)
+        self.tableWidget.setAutoFillBackground(False)
+        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
+        self.tableWidget.setColumnCount(5)
+        self.tableWidget.setRowCount(0)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtGui.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        self.tableWidget.horizontalHeader().setStretchLastSection(False)
+        self.verticalLayout_3.addWidget(self.tableWidget)
         self.graphicsView = QtGui.QGraphicsView(self.centralwidget)
         self.graphicsView.setEnabled(True)
         self.graphicsView.setStyleSheet(_fromUtf8("background-color: rgba(206, 206, 206, 162);"))
@@ -95,7 +121,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.addLayout(self.horizontalLayout_3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 792, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 792, 23))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuBattle = QtGui.QMenu(self.menubar)
         self.menuBattle.setObjectName(_fromUtf8("menuBattle"))
@@ -131,18 +157,29 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Python Robocode", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("MainWindow", "Start Last Battle", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("MainWindow", "Battle\'s Number", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("MainWindow", "Game Speed", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuBattle.setTitle(QtGui.QApplication.translate("MainWindow", "Battle", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuRobot.setTitle(QtGui.QApplication.translate("MainWindow", "Robot", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuHelp.setTitle(QtGui.QApplication.translate("MainWindow", "Help", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNew.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNew_2.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionClass_Reference.setText(QtGui.QApplication.translate("MainWindow", "Class Reference", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Python Robocode", None))
+        self.tableWidget.setSortingEnabled(True)
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "Name", None))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "1st", None))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "2nd", None))
+        item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "3rd", None))
+        item = self.tableWidget.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "Points", None))
+        self.pushButton.setText(_translate("MainWindow", "Start Last Battle", None))
+        self.label_2.setText(_translate("MainWindow", "Battle\'s Number", None))
+        self.label.setText(_translate("MainWindow", "Game Speed", None))
+        self.menuBattle.setTitle(_translate("MainWindow", "Battle", None))
+        self.menuRobot.setTitle(_translate("MainWindow", "Robot", None))
+        self.menuHelp.setTitle(_translate("MainWindow", "Help", None))
+        self.actionNew.setText(_translate("MainWindow", "New", None))
+        self.actionNew_2.setText(_translate("MainWindow", "New", None))
+        self.actionOpen.setText(_translate("MainWindow", "Open", None))
+        self.actionClass_Reference.setText(_translate("MainWindow", "Class Reference", None))
+        self.actionAbout.setText(_translate("MainWindow", "About", None))
 
 
 if __name__ == "__main__":

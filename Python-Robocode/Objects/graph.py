@@ -53,9 +53,19 @@ class Graph(QGraphicsScene):
         except IndexError:
             pass
         j = len(self.deadBots)
+        
+        
         for i in range(j):
-            print "N°",  j - i , ":", self.deadBots[i]
-            
+            print "N°",  j - i , ":", (self.deadBots[i])
+            if j-i == 1: #first place
+                self.Parent.statisticDico[repr(self.deadBots[i])].first += 1
+            if j-i == 2: #2nd place
+                self.Parent.statisticDico[repr(self.deadBots[i])].second += 1
+            if j-i ==3:#3rd place
+                self.Parent.statisticDico[repr(self.deadBots[i])].third += 1
+                
+            self.Parent.statisticDico[repr(self.deadBots[i])].points += i
+                
         self.Parent.chooseAction()       
 
                     

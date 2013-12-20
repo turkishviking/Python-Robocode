@@ -25,6 +25,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.__repr = repr
         self.__gunLock = "free"
         self.__radarLock = "Free"
+        
 
         
         #animation
@@ -147,13 +148,15 @@ class Robot(QtGui.QGraphicsItemGroup):
         
         self.__currentAnimation = []
         
-        self.a = time.time()
+        #self.a = time.time()
 
         
     def advance(self, i):
+        """
         if i ==1:
             print time.time() - self.a
             self.a = time.time()
+        """
         if self.__health <= 0:
             self.__death()
         
@@ -429,7 +432,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         y = pos.y()
         dx = - math.sin(math.radians(angle))*step
         dy = math.cos(math.radians(angle))*step
-        print dx, dy
+        #print dx, dy
         return x+dx, y+dy
         
     def __setRadarRotation(self, angle):
