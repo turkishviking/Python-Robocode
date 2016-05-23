@@ -3,3 +3,6 @@
 *.eric4project
 *~
 *.e4p
+*.metadata
+*.project
+*.pydevproject
