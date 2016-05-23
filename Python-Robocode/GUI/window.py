@@ -85,10 +85,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.timer.setInterval((value**2)/100.0)
     
     @pyqtSignature("")
-    def on_actionNew_activated(self):
+    def on_actionNew_triggered(self):
         """
         Battle Menu
         """
+        print 'ff'
         self.battleMenu = Battle(self)
         self.battleMenu.show()
     
