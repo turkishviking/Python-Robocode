@@ -7,11 +7,11 @@
 
 This is the new and maintained version developed with PyQt
 
-### Need help to start? watch the [wiki](https://github.com/turkishviking/Python-Robocode/wiki)
+### Need help to start? Check the [wiki](https://github.com/turkishviking/Python-Robocode/wiki)
 
-Any help would be welcome! This is a beta version, tell me if you watch some bugs
+Any help is welcome! This is a beta version, tell me if you notice any bugs
 
-### If you want to contribute, I haven't the time yet for developing some base robot( wall runner, coins camper, random move etc...). If you do this, I will be happy to include its into the source code. (Post an issue or make a pull request in this case).
+### If you want to contribute, I do not have the time yet for developing some base robot( wall runner, coins camper, random move etc...). If you do this, I will be happy to include it into the source code. (Post an issue or make a pull request in this case).
 
 ### What's New & Task list:
 
