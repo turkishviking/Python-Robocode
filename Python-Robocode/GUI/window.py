@@ -85,7 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.timer.setInterval((value**2)/100.0)
     
     @pyqtSignature("")
-    def on_actionNew_activated(self):
+    def on_actionNew_triggered(self):
         """
         Battle Menu
         """
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.battleMenu.show()
     
     @pyqtSignature("")
-    def on_actionNew_2_activated(self):
+    def on_actionNew_2_triggered(self):
         """
         Slot documentation goes here.
         """
@@ -101,7 +101,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print "Not Implemented Yet"
     
     @pyqtSignature("")
-    def on_actionOpen_activated(self):
+    def on_actionOpen_triggered(self):
         """
         Slot documentation goes here.
         """
