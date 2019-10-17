@@ -2,16 +2,17 @@ import math
 from robot import Robot
 
 WALL_DISTANCE = 50
-FIRE_DISTANCE = 300
+FIRE_DISTANCE = 500
 
 MOVE_STEP = 5
 BULLET_POWER = 5
 
-STATE_MOVING_UNKNOWN_DIRECTION = 0
-STATE_MOVING_UP    = 1
-STATE_MOVING_RIGHT = 2
-STATE_MOVING_DOWN  = 3
-STATE_MOVING_LEFT  = 4
+STATE_MOVING_UNKNOWN_DIRECTION = -1
+STATE_MOVING_DOWN  = 0
+STATE_MOVING_LEFT  = 1
+STATE_MOVING_UP    = 2
+STATE_MOVING_RIGHT = 3
+STATE_MOVING_ANGLE = (0, 90, 180, 270)
 
 class WallTargetTracker(Robot):
 
@@ -30,42 +31,42 @@ class WallTargetTracker(Robot):
 
         self.state = STATE_MOVING_UNKNOWN_DIRECTION
         self.health = 100
+        self.scan_dir = 1
+        self.scan_dir_can_change = True
 
     def run(self):
         pos = self.getPosition()
         angle = self.getHeading() % 360
+
         if self.state == STATE_MOVING_UNKNOWN_DIRECTION:
-            self.turn(-angle)
-            self.state = STATE_MOVING_DOWN
+            self.state = int((angle - (angle % 90)) // 90)
         elif self.state == STATE_MOVING_UP:
             if pos.y() < WALL_DISTANCE:
-                self.stop()
-                self.turn(90)
                 self.state = STATE_MOVING_RIGHT
-            else:
-                self.move(MOVE_STEP)
         elif self.state == STATE_MOVING_DOWN:
             if self.areaSize.height() - WALL_DISTANCE < pos.y():
-                self.stop()
-                self.turn(90)
                 self.state = STATE_MOVING_LEFT
-            else:
-                self.move(MOVE_STEP)
         elif self.state == STATE_MOVING_LEFT:
             if pos.x() < WALL_DISTANCE:
-                self.stop()
-                self.turn(90)
                 self.state = STATE_MOVING_UP
-            else:
-                self.move(MOVE_STEP)
         elif self.state == STATE_MOVING_RIGHT:
             if self.areaSize.width() - WALL_DISTANCE < pos.x():
-                self.stop()
-                self.turn(90)
                 self.state = STATE_MOVING_DOWN
-            else:
-                self.move(MOVE_STEP)
-        self.gunTurn(5)
+
+        target_angle = STATE_MOVING_ANGLE[self.state]
+        if int(target_angle - angle) == 0:
+            self.move(MOVE_STEP)
+        else:
+            self.stop()
+            self.turn(target_angle - angle)
+
+        ga = self.getGunHeading()
+        if (ga < 0 or 180 < ga) and self.scan_dir_can_change:
+            self.scan_dir *= -1
+            self.scan_dir_can_change = False
+        self.gunTurn(self.scan_dir * 5 + STATE_MOVING_ANGLE[self.state])
+        if 0 < ga and ga < 180:
+            self.scan_dir_can_change = True
             
     def onHitWall(self):
         self.reset()
@@ -98,9 +99,9 @@ class WallTargetTracker(Robot):
         dx = botPos.x() - pos.x()
         dy = botPos.y() - pos.y()
 
-        my_gun_angle = self.getGunHeading() % 360
+        gun_angle = self.getGunHeading() % 360
         enemy_angle = math.degrees(math.atan2(dy, dx)) - 90
-        a = enemy_angle - my_gun_angle
+        a = enemy_angle - gun_angle
         if a < -180:
             a += 360
         elif 180 < a:
@@ -108,22 +109,15 @@ class WallTargetTracker(Robot):
         self.gunTurn(a)
 
         dist = math.sqrt(dx**2 + dy**2)
-        if dist < FIRE_DISTANCE and 5 * BULLET_POWER < self.health:
+        if dist < FIRE_DISTANCE and 3 * BULLET_POWER < self.health:
             self.health -= BULLET_POWER
             self.fire(BULLET_POWER)
 
-        my_angle = self.getHeading() % 360
-        da = 0
-        if self.state == STATE_MOVING_UP:
-            da = 180-my_angle
-        elif self.state == STATE_MOVING_DOWN:
-            da = -my_angle
-        elif self.state == STATE_MOVING_LEFT:
-            da = 90-my_angle
-        elif self.state == STATE_MOVING_RIGHT:
-            da = 270-my_angle
-        if da == 0:
+        angle = self.getHeading() % 360
+        target_angle = STATE_MOVING_ANGLE[self.state]
+        if int(target_angle - angle) == 0:
             self.move(MOVE_STEP)
         else:
-            self.turn(da)
+            self.stop()
+            self.turn(target_angle - angle)
 
