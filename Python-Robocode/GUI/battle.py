@@ -86,6 +86,9 @@ class Battle(QDialog, Ui_Dialog):
         dico["width"] = width
         dico["height"] = height
         dico["botList"] = botList
+
+        if not os.path.exists(os.getcwd() + "/.datas/"):
+            os.makedirs(os.getcwd() + "/.datas/")
         
         with open(os.getcwd() + "/.datas/lastArena",  'wb') as file:
             pickler = pickle.Pickler(file)

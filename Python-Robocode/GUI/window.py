@@ -38,10 +38,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Start the last battle
         """
         
-        with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
-            unpickler = pickle.Unpickler(file)
-            dico = unpickler.load()
-        file.close()
+        if os.path.exists(os.getcwd() + "/.datas/lastArena"):
+            with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
+                unpickler = pickle.Unpickler(file)
+                dico = unpickler.load()
+            file.close()
+        else:
+            print("No last arena found.")
 
         self.setUpBattle(dico["width"] , dico["height"], dico["botList"] )
         
