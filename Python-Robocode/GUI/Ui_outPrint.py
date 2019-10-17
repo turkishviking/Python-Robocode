@@ -4,40 +4,41 @@
 #
 # Created: Thu May 30 02:58:40 2013
 #      by: PyQt4 UI code generator 4.9.3
+# Modified: Thu Oct 17 12:30:00JST 2019
+#      by: hjmr
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
 
-try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    _fromUtf8 = lambda s: s
+from PyQt5.QtWidgets import QApplication, QWidget, QTextEdit
+from PyQt5.QtWidgets import QSizePolicy, QVBoxLayout, QHBoxLayout
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import QMetaObject
 
 class Ui_Form(object):
     def setupUi(self, Form):
-        Form.setObjectName(_fromUtf8("Form"))
+        Form.setObjectName("Form")
         Form.resize(444, 383)
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8("robotImages/small.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon = QIcon()
+        icon.addPixmap(QPixmap("robotImages/small.png"), QIcon.Normal, QIcon.Off)
         Form.setWindowIcon(icon)
-        self.verticalLayout = QtGui.QVBoxLayout(Form)
-        self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
-        self.textEdit = QtGui.QTextEdit(Form)
-        self.textEdit.setObjectName(_fromUtf8("textEdit"))
+        self.verticalLayout = QVBoxLayout(Form)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.textEdit = QTextEdit(Form)
+        self.textEdit.setObjectName("textEdit")
         self.verticalLayout.addWidget(self.textEdit)
 
         self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
+        Form.setWindowTitle(QApplication.translate("Form", "Form"))
 
 
 if __name__ == "__main__":
     import sys
-    app = QtGui.QApplication(sys.argv)
-    Form = QtGui.QWidget()
+    app = QApplication(sys.argv)
+    Form = QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()

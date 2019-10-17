@@ -8,12 +8,12 @@ sys.path.append(os.getcwd() + "/Objects")
 sys.path.append(os.getcwd() + "/robotImages")
 sys.path.append(os.getcwd() + "/Robots")
 from window import MainWindow
-from PyQt4 import QtGui
+from PyQt5.QtWidgets import QApplication
 
 
 if __name__ == "__main__":
 
-   app = QtGui.QApplication(sys.argv)
+   app = QApplication(sys.argv)
    app.setApplicationName("Python-Robocode")
    myapp = MainWindow()
    myapp.show()

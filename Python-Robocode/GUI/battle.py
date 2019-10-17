@@ -4,12 +4,13 @@
 Module implementing Battle.
 """
 
-from PyQt4.QtGui import QDialog
-from PyQt4.QtCore import pyqtSignature
 import os
-from robot import Robot
 import pickle
 
+from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import pyqtSlot
+
+from robot import Robot
 from Ui_battle import Ui_Dialog
 
 class Battle(QDialog, Ui_Dialog):
@@ -39,13 +40,13 @@ class Battle(QDialog, Ui_Dialog):
                                 bot = someBot
                                 self.listBots[str(bot).replace("<class '","").replace("'>", "")] = bot
                                 break
-                    except Exception,  e:
-                        print "Problem with bot file '%s': %s" % (botFile, str(e))
+                    except Exception as e:
+                        print("Problem with bot file '{}': {}".format(botFile, str(e)))
                         
         for key in self.listBots.keys():
             self.listWidget.addItem(key)
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_pushButton_clicked(self):
         """
         Add Bot
@@ -54,7 +55,7 @@ class Battle(QDialog, Ui_Dialog):
         self.listWidget_2.addItem(self.listWidget.currentItem().text())
  
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_pushButton_2_clicked(self):
         """
         Remove Bot
@@ -62,7 +63,7 @@ class Battle(QDialog, Ui_Dialog):
         item = self.listWidget_2.takeItem(self.listWidget_2.currentRow())
         item = None
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_pushButton_3_clicked(self):
         """
         Start
