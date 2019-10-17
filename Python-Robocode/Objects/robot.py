@@ -390,9 +390,9 @@ class Robot(QGraphicsItemGroup):
         
     def getGunHeading(self):
         angle = self.__gun.rotation()
-        if angle > 360:
-            a = int(angle) / 360
-            angle = angle - (360*a)
+        # if angle > 360:
+        #     a = int(angle) / 360
+        #     angle = angle - (360*a)
         return angle
         
     def getHeading(self):
