@@ -174,7 +174,7 @@ class Robot(QGraphicsItemGroup):
                     self.stop()
                     try:
                         self.run()
-                    except Exception as e:
+                    except:
                         traceback.print_exc()
                         exit(-1)
                     self.__physics.reverse()
@@ -470,7 +470,11 @@ class Robot(QGraphicsItemGroup):
         self.setPos(self.pos().x() + x, self.pos().y() + y)
         self.__changeHealth(self,  -1)
         self.stop()
-        self.onHitWall()
+        try:
+            self.onHitWall()
+        except:
+            traceback.print_exc()
+            exit(-1)
         animation = self.__physics.makeAnimation()
         if animation != []:
             self.__currentAnimation = animation
@@ -478,31 +482,35 @@ class Robot(QGraphicsItemGroup):
        
         
     def __robotRebound(self, robot):
-        self.reset()
-        robot.reset()
-        angle = self.__base.rotation()
-        pos = self.pos()
-        x = pos.x()
-        y = pos.y()
-        dx = - math.sin(math.radians(angle))*self.__physics.step*1.1
-        dy = math.cos(math.radians(angle))*self.__physics.step*1.1
-        self.setPos(x-dx, y-dy)
-        pos = robot.pos()
-        x = pos.x()
-        y = pos.y()
-        robot.setPos(x+dx, y+dy)
-        self.__changeHealth(robot,  -1)
-        self.__changeHealth(self,  -1)
-        self.stop()
-        self.onRobotHit(id(robot), robot.__repr__())
-        animation = self.__physics.makeAnimation()
-        if animation != []:
-            self.__currentAnimation = animation
-        robot.stop()
-        robot.onHitByRobot(id(self), self.__repr__())
-        animation = robot.__physics.makeAnimation()
-        if animation != []:
-            robot.__currentAnimation = animation
+        try:
+            self.reset()
+            robot.reset()
+            angle = self.__base.rotation()
+            pos = self.pos()
+            x = pos.x()
+            y = pos.y()
+            dx = - math.sin(math.radians(angle))*self.__physics.step*1.1
+            dy = math.cos(math.radians(angle))*self.__physics.step*1.1
+            self.setPos(x-dx, y-dy)
+            pos = robot.pos()
+            x = pos.x()
+            y = pos.y()
+            robot.setPos(x+dx, y+dy)
+            self.__changeHealth(robot,  -1)
+            self.__changeHealth(self,  -1)
+            self.stop()
+            self.onRobotHit(id(robot), robot.__repr__())
+            animation = self.__physics.makeAnimation()
+            if animation != []:
+                self.__currentAnimation = animation
+            robot.stop()
+            robot.onHitByRobot(id(self), self.__repr__())
+            animation = robot.__physics.makeAnimation()
+            if animation != []:
+                robot.__currentAnimation = animation
+        except:
+            traceback.print_exc()
+            exit(-1)
 
         
         
@@ -531,7 +539,11 @@ class Robot(QGraphicsItemGroup):
         anim = target.robot.__currentAnimation
         target.robot.__physics.animation = target.robot.__targetAnimation
         target.robot.__physics.reset()
-        target.robot.onTargetSpotted(id(self), self.__repr__(), self.getPosition())
+        try:
+            target.robot.onTargetSpotted(id(self), self.__repr__(), self.getPosition())
+        except:
+            traceback.print_exc()
+            exit(-1)
         target.robot.__physics.newAnimation()
         target.robot.__physics.reverse()
         try:
@@ -564,7 +576,11 @@ class Robot(QGraphicsItemGroup):
             pass
         self.__parent.deadBots.append(self)
         self.__parent.aliveBots.remove(self)
-        self.onRobotDeath()
+        try:
+            self.onRobotDeath()
+        except:
+            traceback.print_exc()
+            exit(-1)
         self.__parent.removeItem(self)
         if  len(self.__parent.aliveBots) <= 1:
             self.__parent.battleFinished()
