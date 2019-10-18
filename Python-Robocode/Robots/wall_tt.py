@@ -1,10 +1,12 @@
 import math
+import random
 from robot import Robot
 
 WALL_DISTANCE = 50
 FIRE_DISTANCE = 500
 
 MOVE_STEP = 5
+SCAN_STEP = 3
 BULLET_POWER = 5
 
 STATE_MOVING_UNKNOWN_DIRECTION = -1
@@ -32,15 +34,35 @@ class WallTargetTracker(Robot):
         self.state = STATE_MOVING_UNKNOWN_DIRECTION
         self.health = 100
 
+        self.scan_angle = 0
         self.scan_dir = 1
         self.scan_dir_can_change = True
 
+    def move_following_walls(self):
+        angle = self.getHeading() % 360
+        target_angle = STATE_MOVING_ANGLE[self.state]
+        da = target_angle - angle
+        while da < -180:
+            da += 360
+        while 180 < da:
+            da -= 360
+        if int(da) == 0:
+            self.move(MOVE_STEP)
+        else:
+            self.turn(da / 5)
+            self.gunTurn(da / 5)
+
     def run(self):
         pos = self.getPosition()
-        angle = self.getHeading() % 360
+        angle = self.getHeading()
 
         if self.state == STATE_MOVING_UNKNOWN_DIRECTION:
-            self.state = int((angle - (angle % 90)) // 90)
+            dis_pos = (
+                self.areaSize.height() - pos.y(),
+                pos.x(),
+                pos.y(),
+                self.areaSize.width() - pos.x())
+            self.state = dis_pos.index(min(dis_pos))
         elif self.state == STATE_MOVING_UP:
             if pos.y() < WALL_DISTANCE:
                 self.state = STATE_MOVING_RIGHT
@@ -53,25 +75,20 @@ class WallTargetTracker(Robot):
         elif self.state == STATE_MOVING_RIGHT:
             if self.areaSize.width() - WALL_DISTANCE < pos.x():
                 self.state = STATE_MOVING_DOWN
+        self.move_following_walls()
 
-        target_angle = STATE_MOVING_ANGLE[self.state]
-        if int(target_angle - angle) == 0:
-            self.move(MOVE_STEP)
-        else:
-            self.turn(target_angle - angle)
-
-        ga = self.getGunHeading()
-        if (ga < 0 or 180 < ga) and self.scan_dir_can_change:
+        scan_angle = self.getGunHeading()  - angle
+        if (scan_angle < 0 or 180 < scan_angle) and self.scan_dir_can_change:
             self.scan_dir *= -1
             self.scan_dir_can_change = False
-        self.gunTurn(self.scan_dir * 5 + STATE_MOVING_ANGLE[self.state])
-        if 0 < ga and ga < 180:
+        scan_step = SCAN_STEP if self.scan_dir == 1 else 2 * SCAN_STEP
+        self.gunTurn(self.scan_dir * scan_step)
+        if 0 < scan_angle and scan_angle < 180:
             self.scan_dir_can_change = True
-
             
     def onHitWall(self):
         self.reset()
-        self.move(-2 * MOVE_STEP)
+        self.move(-MOVE_STEP)
 
     def sensors(self): 
         pass
@@ -114,10 +131,5 @@ class WallTargetTracker(Robot):
             self.health -= BULLET_POWER
             self.fire(BULLET_POWER)
 
-        angle = self.getHeading() % 360
-        target_angle = STATE_MOVING_ANGLE[self.state]
-        if int(target_angle - angle) == 0:
-            self.move(MOVE_STEP)
-        else:
-            self.turn(target_angle - angle)
+        self.move_following_walls()
 
