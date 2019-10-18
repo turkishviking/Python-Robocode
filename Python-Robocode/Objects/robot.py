@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 import time, os, math
+import traceback
 
 from PyQt5.QtWidgets import QGraphicsItemGroup, QGraphicsPixmapItem, QGraphicsRectItem
 from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon
@@ -171,7 +172,11 @@ class Robot(QGraphicsItemGroup):
                         pass
                 else:
                     self.stop()
-                    self.run()
+                    try:
+                        self.run()
+                    except Exception as e:
+                        traceback.print_exc()
+                        exit(-1)
                     self.__physics.reverse()
                     try:
                         self.__currentAnimation  = self.__physics.animation.list.pop()
