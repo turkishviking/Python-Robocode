@@ -31,6 +31,7 @@ class WallTargetTracker(Robot):
 
         self.state = STATE_MOVING_UNKNOWN_DIRECTION
         self.health = 100
+
         self.scan_dir = 1
         self.scan_dir_can_change = True
 
@@ -57,7 +58,6 @@ class WallTargetTracker(Robot):
         if int(target_angle - angle) == 0:
             self.move(MOVE_STEP)
         else:
-            self.stop()
             self.turn(target_angle - angle)
 
         ga = self.getGunHeading()
@@ -67,6 +67,7 @@ class WallTargetTracker(Robot):
         self.gunTurn(self.scan_dir * 5 + STATE_MOVING_ANGLE[self.state])
         if 0 < ga and ga < 180:
             self.scan_dir_can_change = True
+
             
     def onHitWall(self):
         self.reset()
@@ -118,6 +119,5 @@ class WallTargetTracker(Robot):
         if int(target_angle - angle) == 0:
             self.move(MOVE_STEP)
         else:
-            self.stop()
             self.turn(target_angle - angle)
 
