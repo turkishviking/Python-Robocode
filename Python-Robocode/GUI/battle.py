@@ -39,8 +39,8 @@ class Battle(QDialog, Ui_Dialog):
                                 bot = someBot
                                 self.listBots[str(bot).replace("<class '","").replace("'>", "")] = bot
                                 break
-                    except Exception,  e:
-                        print "Problem with bot file '%s': %s" % (botFile, str(e))
+                    except Exception as e:
+                        print("Problem with bot file '%s': %s" % (botFile, str(e)))
                         
         for key in self.listBots.keys():
             self.listWidget.addItem(key)

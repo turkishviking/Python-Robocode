@@ -98,7 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        print "Not Implemented Yet"
+        print("Not Implemented Yet")
     
     @pyqtSignature("")
     def on_actionOpen_triggered(self):
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        print "Not Implemented Yet"
+        print("Not Implemented Yet")
 
     def resizeEvent(self, evt=None):
         try:

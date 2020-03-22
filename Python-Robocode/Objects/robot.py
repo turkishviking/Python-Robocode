@@ -263,7 +263,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if distance < 0:
             s = -1
-        steps = s*distance/self.__physics.step
+        steps = int(s*distance/self.__physics.step)
         d = distance%self.__physics.step
         if d != 0:
             self.__physics.move.append(s*d)

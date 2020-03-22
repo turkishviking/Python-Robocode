@@ -37,8 +37,8 @@ class Graph(QGraphicsScene):
                     self.addItem(robot)
                     robot.setPos(posList.pop())
                     self.Parent.addRobotInfo(robot)
-                except Exception,  e:
-                    print "Problem with bot file '%s': %s" % (bot, str(e))
+                except Exception as e:
+                    print("Problem with bot file '%s': %s" % (bot, str(e)))
             self.Parent.battleMenu.close()
         except ValueError:
             QMessageBox.about(self.Parent, "Alert", "Too many Bots for the map's size!")
@@ -46,7 +46,7 @@ class Graph(QGraphicsScene):
             pass
 
     def  battleFinished(self):
-        print "battle terminated"
+        print("battle terminated")
         try:
             self.deadBots.append(self.aliveBots[0])
             self.removeItem(self.aliveBots[0])
@@ -56,7 +56,7 @@ class Graph(QGraphicsScene):
         
         
         for i in range(j):
-            print "N°",  j - i , ":", (self.deadBots[i])
+            print("N°",  j - i , ":", (self.deadBots[i]))
             if j-i == 1: #first place
                 self.Parent.statisticDico[repr(self.deadBots[i])].first += 1
             if j-i == 2: #2nd place
