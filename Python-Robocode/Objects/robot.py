@@ -404,7 +404,7 @@ class Robot(QGraphicsItemGroup):
         return self.__base.rotation()
         
     def getRadarHeading(self):
-        return self.__gun.rotation()
+        return self.__radar.rotation()
         
     def reset(self):
         self.__physics.reset()
