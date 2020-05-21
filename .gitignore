@@ -6,3 +6,5 @@
 *.metadata
 *.project
 *.pydevproject
+*.idea
+*.spyproject
