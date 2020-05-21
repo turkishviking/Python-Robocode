@@ -1,7 +1,6 @@
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
-from time import time
 from math import cos, sin, radians
 from robot import Robot  # Import a base Robot
 import math
@@ -21,10 +20,7 @@ import math
 #   shooting power is tuned with distance to enemy to maximize chances of rapid killing
 #
 #   robot uses delays to fire when enemy doesn't move.
-#   FIXME! as game speed can be changed, sensor() method measure game speed and delays can adapt to current speed.
-#   todo:
-#       - change code to depend on self.runcounter instead of wall clock
-#       - radar initial rotating angle cw or ccw could be optimized from initial position
+#   FIXME!
 #       - could avoid running through enemy ?
 #       - when there is only one opponent, could turn around the enemy and fire !
 #       - could team with same class robots to maximize win chances
@@ -56,10 +52,11 @@ class T800(Robot):  # Create a Robot
         # initialiase some variables
         #        self.move_step = MOVE_STEP
         self.state = STATE_INIT
-        self.runcounter = 0
-        self.last_time = int(time()) #used to measure delays (radar, firing)
-        self.last_sensor = 0
-        self.sensor_mean = 0    #used to calibrate game speed
+        self.runcounter = 0     #used to record time based on game turns for our bot
+        self.last_time = 0      #used to measure delays in "game turns"
+
+        #these ugly variables keep track of corners of the gameplay we will travel to
+        #repeatedly to never stay put. These are calculated based on other enemies position.
         self.C0X = -1  # will store destination C0 X we want to reach
         self.C0Y = -1  # will store destination C0 Y we want to reach
         self.C1X = -1  # will store destination C1 X we want to reach
@@ -67,20 +64,17 @@ class T800(Robot):  # Create a Robot
         self.C2X = -1  # will store destination C2 X we want to reach
         self.C2Y = -1  # will store destination C2 Y we want to reach
 
-        self.radarVisible(True)  # if True the radar field is visible
-        self.lockRadar("gun")  # might be "free","base" or "gun"
-        self.radarGoingAngle = 5  # step angle for radar rotation
-        self.lookingForBot = 0  # botId we are looking for
-        self.angleMinBot = 0  # botId of further bot when radar rotating ccw
-        self.angleMaxBot = 0  # botId of further bot when radar rotating cw
+        self.radarVisible(True)     # if True the radar field is visible
+        self.lockRadar("gun")       # might be "free","base" or "gun"
+        self.radarGoingAngle = 5    # step angle for radar rotation
+        self.lookingForBot = 0      # botId we are looking for
+        self.angleMinBot = 0        # botId of further bot when radar rotating ccw
+        self.angleMaxBot = 0        # botId of further bot when radar rotating cw
 
         # self.enemies is a list of existing opponents and their last known location
-        # onTargetSpotted() is used to update enemy list and their last known position
+        # onTargetSpotted() is used to update enemy list and their position
         # sensor() is used to delete missing opponents (dead)
         self.enemies = {}
-
-
-
 
     def MyMove(self, step: int):
         # MyMove takes care of not loosing health by not hitting walls.
@@ -111,7 +105,7 @@ class T800(Robot):  # Create a Robot
             self.onHitWall()
 
     def MyComputeDestAway(self):
-        # compute enemy center
+        # compute enemy position center and deduce corners of gameplay we will run to.
         x = y = r = 0
         for robot in self.enemies:
             r += 1
@@ -174,6 +168,8 @@ class T800(Robot):  # Create a Robot
 
         delta_angle = new_angle - angle
 
+        #when turning on itself, the bot stays put and is an ideal target
+        #we prefer running backward (reverse) and use a lower rotation angle when it makes sens
         if delta_angle > 90:
             delta_angle = delta_angle - 180
             step = - step
@@ -194,17 +190,20 @@ class T800(Robot):  # Create a Robot
         if delta_angle == 0:
             pass
 
-        if urgency_flag or abs(delta_angle) < 30:  # "only move when near wanted direction"
+        #if moving is an emergency, start immediately
+        #otherwise, wait until almost set to the right direction
+        if urgency_flag or abs(delta_angle) < 30:
             self.MyMove(step)
 
         return False
 
     def MyComputeBotSearch(self, botSpotted):
-        #compute radar seeking range based on known enemy positions
-        #when we know all enemies positions
+        # when we know all enemies positions, we compute radar seeking range
+        # based on known enemy positions to avoid scanning empty space.
+
+        #angles will store all enemies position for us
         angles = {}
-        if botSpotted==0 and self.radarGoingAngle == 0 :
-            self.radarGoingAngle = 5
+
         e1 = len(self.getEnemiesLeft()) - 1  # we are counted in enemiesLeft !!
         e2 = len(self.enemies)
         if e1 == e2:
@@ -235,19 +234,19 @@ class T800(Robot):  # Create a Robot
                 elif amin < 0:
                     self.radarGoingAngle = -min([5, -amin])
                 else:
-                    self.radarGoingAngle = 0
+                    self.radarGoingAngle = 1
 
-                now=time()
-                if botSpotted!=0 and (self.radarGoingAngle)<1 and now>self.last_time:
+                #called with some bot spotted ! try to shoot ...
+                if botSpotted!=0 and abs(self.radarGoingAngle)<1 and self.runcounter>self.last_time:
                     dx=self.enemies[angles[amin]]["x"]-pos.x()
                     dy=self.enemies[angles[amin]]["y"]-pos.y()
                     dist=math.sqrt(dx**2+dy**2)
-                    print("sensor_mean=", self.sensor_mean)
-#                    dt=0.2  #if enemy moves, don't fire
-                    dt=8*self.sensor_mean  #if enemy moves, don't fire
-                    if now-self.enemies[angles[amin]]["move"] > dt:
+
+                    if self.runcounter-self.enemies[angles[amin]]["move"] > 2:  #shoot only if not moving since 2 rounds
+                        #fire with more power if near the robot, lower power with distance
                         self.fire(int(1000/dist)+1)
-                        self.last_time=time()+(dist*self.sensor_mean)/(2000*0.035)
+                        #slow down fire rate with distance
+                        self.last_time=self.runcounter+int(dist/150)
 
             elif self.lookingForBot == botSpotted:
                 #bot spotted is the one we were looking for.
@@ -278,7 +277,6 @@ class T800(Robot):  # Create a Robot
             position = self.getPosition()
             myX = position.x()
             myY = position.y()
-            print("initial position:",myX,myY)
             if myX < self.MapX//2:
                 self.C0X = MOVE_LIMIT
                 self.radarGoingAngle = -5  # step angle for radar rotation
@@ -294,27 +292,25 @@ class T800(Robot):  # Create a Robot
             self.MyGoto(self.C0X, self.C0Y, MOVE_STEP, True)
 
         if self.state == STATE_RUNNING_C0:
-            if int(time()) > self.last_time + 0.5:
+            if self.runcounter > self.last_time + 5:    #change after first 5 rounds
                 self.setRadarField("thin")  # might be "normal", "large, "thin", "round"
-            if (self.radarGoingAngle!=0):
-                self.gunTurn(self.radarGoingAngle)
+            self.MyComputeBotSearch(0)
+            self.gunTurn(self.radarGoingAngle)
             self.MyGoto(self.C0X, self.C0Y, MOVE_STEP, True)
             if self.C1X != -1:
                 self.state = STATE_RUNNING_C1
 
         if self.state == STATE_RUNNING_C1:
             self.setRadarField("thin")  # might be "normal", "large, "thin", "round"
-            if (self.radarGoingAngle != 0):
-                self.MyComputeBotSearch(0)
-                self.gunTurn(self.radarGoingAngle)
+            self.MyComputeBotSearch(0)
+            self.gunTurn(self.radarGoingAngle)
             if self.MyGoto(self.C1X, self.C1Y, MOVE_STEP, False):
                 self.state = STATE_RUNNING_C2
 
         if self.state == STATE_RUNNING_C2:
             self.setRadarField("thin")  # might be "normal", "large, "thin", "round"
-            if (self.radarGoingAngle != 0):
-                self.MyComputeBotSearch(0)
-                self.gunTurn(self.radarGoingAngle)
+            self.MyComputeBotSearch(0)
+            self.gunTurn(self.radarGoingAngle)
             if self.MyGoto(self.C2X, self.C2Y, MOVE_STEP, False):
                 self.state = STATE_RUNNING_C1
 
@@ -322,15 +318,7 @@ class T800(Robot):  # Create a Robot
         self.rPrint("ouch! a wall !")
 
     def sensors(self):
-        now=time()
-        if (self.last_sensor != 0):
-            if self.sensor_mean == 0:
-                self.sensor_mean = now-self.last_sensor
-            else:
-                self.sensor_mean = (self.sensor_mean + now-self.last_sensor)/2
-        self.last_sensor = now
-
-        # get rid of dead oppponents
+        # get rid of dead oppponents in our tracking list
         list = self.getEnemiesLeft()  # return a list of the enemies alive in the battle
         alive = []
         for robot in list:
@@ -364,18 +352,19 @@ class T800(Robot):  # Create a Robot
     def onTargetSpotted(self, botId, botName, botPos):  # NECESARY FOR THE GAME
         #keep a list of spotted enemies with enemy coordinates recorded.
         #compute destination if new bot spotted or if known bot is moving
+        # store x and y position and "date" of last seen (runcounter)
         if botId not in self.enemies:
             self.enemies[botId] = {}
             self.enemies[botId]["x"] = botPos.x()
             self.enemies[botId]["y"] = botPos.y()
-            self.enemies[botId]["move"] = time()
+            self.enemies[botId]["move"] = self.runcounter
             self.MyComputeDestAway()
         else:
             if self.enemies[botId]["x"] != botPos.x() or self.enemies[botId]["y"] != botPos.y():
-                self.enemies[botId]["move"] = time()
                 self.enemies[botId]["x"] = botPos.x()
                 self.enemies[botId]["y"] = botPos.y()
+                self.enemies[botId]["move"] = self.runcounter
                 self.MyComputeDestAway()
 
-        #compute radar next moves
+        #compute radar next moves with information of botId currently aimed
         self.MyComputeBotSearch(botId)
