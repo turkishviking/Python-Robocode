@@ -1,11 +1,13 @@
 #! /usr/bin/python
 #-*- coding: utf-8 -*-
 
-from PyQt4.QtGui import QGraphicsScene,  QMessageBox,  QBrush, QColor, QPixmap, QGraphicsRectItem
-from PyQt4.QtCore import SIGNAL,  QPointF
-from PyQt4 import QtCore,  Qt
+import time, os, random
+
+from PyQt5.QtWidgets import QGraphicsScene, QMessageBox, QGraphicsRectItem
+from PyQt5.QtGui import QPixmap, QColor, QBrush
+from PyQt5.QtCore import QPointF, QRectF
+
 from robot import Robot
-import time,  os,  random
 from outPrint import outPrint
 
 class Graph(QGraphicsScene):
@@ -37,8 +39,8 @@ class Graph(QGraphicsScene):
                     self.addItem(robot)
                     robot.setPos(posList.pop())
                     self.Parent.addRobotInfo(robot)
-                except Exception,  e:
-                    print "Problem with bot file '%s': %s" % (bot, str(e))
+                except Exception as e:
+                    print("Problem with bot file '{}': {}".format(bot, str(e)))
             self.Parent.battleMenu.close()
         except ValueError:
             QMessageBox.about(self.Parent, "Alert", "Too many Bots for the map's size!")
@@ -46,7 +48,7 @@ class Graph(QGraphicsScene):
             pass
 
     def  battleFinished(self):
-        print "battle terminated"
+        print("battle terminated")
         try:
             self.deadBots.append(self.aliveBots[0])
             self.removeItem(self.aliveBots[0])
@@ -56,7 +58,7 @@ class Graph(QGraphicsScene):
         
         
         for i in range(j):
-            print "N°",  j - i , ":", (self.deadBots[i])
+            print("N° {}:{}".format(j - i, self.deadBots[i]))
             if j-i == 1: #first place
                 self.Parent.statisticDico[repr(self.deadBots[i])].first += 1
             if j-i == 2: #2nd place
@@ -81,7 +83,7 @@ class Graph(QGraphicsScene):
         #left
         left = QGraphicsRectItem()
         pix = QPixmap(os.getcwd() + "/robotImages/tileVert.png")
-        left.setRect(QtCore.QRectF(0, 0, pix.width(), self.height))
+        left.setRect(QRectF(0, 0, pix.width(), self.height))
         brush.setTexture(pix)
         brush.setStyle(24)
         left.setBrush(brush)
@@ -96,7 +98,7 @@ class Graph(QGraphicsScene):
         #top
         top = QGraphicsRectItem()
         pix = QPixmap(os.getcwd() + "/robotImages/tileHori.png")
-        top.setRect(QtCore.QRectF(0, 0, self.width, pix.height()))
+        top.setRect(QRectF(0, 0, self.width, pix.height()))
         brush.setTexture(pix)
         brush.setStyle(24)
         top.setBrush(brush)
@@ -115,5 +117,5 @@ class Graph(QGraphicsScene):
         l = []
         for i in range(w):
             for j in range(h):
-                l.append(QtCore.QPointF((i+0.5)*80, (j+0.5)*80))
+                l.append(QPointF((i+0.5)*80, (j+0.5)*80))
         return l

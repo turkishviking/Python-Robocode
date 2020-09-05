@@ -4,13 +4,14 @@
 Module implementing MainWindow.
 """
 
-from PyQt4.QtGui import QMainWindow, QGraphicsScene
-from PyQt4 import QtGui 
-from PyQt4.QtCore import pyqtSignature,  QTimer,  SIGNAL
+import os,  pickle
+
+from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QHeaderView, QTableWidgetItem
+from PyQt5.QtCore import pyqtSlot, QTimer
+
 from graph import Graph
 from Ui_window import Ui_MainWindow
 from battle import Battle
-import os,  pickle
 from robot import Robot
 from RobotInfo import RobotInfo
 from statistic import statistic
@@ -27,20 +28,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.countBattle = 0
         self.timer = QTimer()
-        self.tableWidget.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+        self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget.hide()
         
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_pushButton_clicked(self):
         """
         Start the last battle
         """
         
-        with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
-            unpickler = pickle.Unpickler(file)
-            dico = unpickler.load()
-        file.close()
+        if os.path.exists(os.getcwd() + "/.datas/lastArena"):
+            with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
+                unpickler = pickle.Unpickler(file)
+                dico = unpickler.load()
+            file.close()
+        else:
+            print("No last arena found.")
 
         self.setUpBattle(dico["width"] , dico["height"], dico["botList"] )
         
@@ -59,7 +63,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def startBattle(self):
         
         try:
-            self.disconnect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
+            self.timer.timeout.disconnect(self.scene.advance)
             del self.timer
             del self.scene
             del self.sceneMenu
@@ -73,18 +77,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.scene = Graph(self,  self.width,  self.height)
         self.graphicsView.setScene(self.scene)
         self.scene.AddRobots(self.botList)
-        self.connect(self.timer, SIGNAL("timeout()"),  self.scene.advance)
+        self.timer.timeout.connect(self.scene.advance)
         self.timer.start((self.horizontalSlider.value()**2)/100.0)
         self.resizeEvent()
     
-    @pyqtSignature("int")
+    @pyqtSlot(int)
     def on_horizontalSlider_valueChanged(self, value):
         """
         Slot documentation goes here.
         """
         self.timer.setInterval((value**2)/100.0)
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_actionNew_triggered(self):
         """
         Battle Menu
@@ -92,21 +96,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.battleMenu = Battle(self)
         self.battleMenu.show()
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_actionNew_2_triggered(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        print "Not Implemented Yet"
+        print("Not Implemented Yet")
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_actionOpen_triggered(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        print "Not Implemented Yet"
+        print("Not Implemented Yet")
 
     def resizeEvent(self, evt=None):
         try:
@@ -137,11 +141,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.tableWidget.setRowCount(len(self.statisticDico))
             i = 0
             for key, value in self.statisticDico.items():
-                self.tableWidget.setItem(i, 0,  QtGui.QTableWidgetItem(key))
-                self.tableWidget.setItem(i, 1,  QtGui.QTableWidgetItem(str(value.first)))
-                self.tableWidget.setItem(i, 2,  QtGui.QTableWidgetItem(str(value.second)))
-                self.tableWidget.setItem(i, 3,  QtGui.QTableWidgetItem(str(value.third)))
-                self.tableWidget.setItem(i, 4,  QtGui.QTableWidgetItem(str(value.points)))
+                self.tableWidget.setItem(i, 0,  QTableWidgetItem(key))
+                self.tableWidget.setItem(i, 1,  QTableWidgetItem(str(value.first)))
+                self.tableWidget.setItem(i, 2,  QTableWidgetItem(str(value.second)))
+                self.tableWidget.setItem(i, 3,  QTableWidgetItem(str(value.third)))
+                self.tableWidget.setItem(i, 4,  QTableWidgetItem(str(value.points)))
                
                 i += 1
                 

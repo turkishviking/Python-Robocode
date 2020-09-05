@@ -1,21 +1,19 @@
 #! /usr/bin/python
 #-*- coding: utf-8 -*-
 
-
-from PyQt4.QtGui import QGraphicsPixmapItem
-from PyQt4.QtCore import SIGNAL
-from PyQt4 import QtCore,  Qt
-from PyQt4 import QtGui
 import os
 import math
+
+from PyQt5.QtWidgets import QGraphicsPixmapItem
+from PyQt5.QtGui import QPixmap, QColor, QPainter
 
 class Bullet(QGraphicsPixmapItem):
     
     def __init__(self, power, color, bot):
         QGraphicsPixmapItem.__init__(self)
         #graphics
-        self.maskColor = QtGui.QColor(255, 128, 0)
-        self.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/blast.png")
+        self.maskColor = QColor(255, 128, 0)
+        self.pixmap = QPixmap(os.getcwd() + "/robotImages/blast.png")
         self.setPixmap(self.pixmap)
         self.setColour(color)
         self.isfired = False
@@ -44,7 +42,7 @@ class Bullet(QGraphicsPixmapItem):
         
     def setColour(self, color):
         mask = self.pixmap.createMaskFromColor(self.maskColor,  1)
-        p = QtGui.QPainter(self.pixmap)
+        p = QPainter(self.pixmap)
         p.setPen(color)
         p.drawPixmap(self.pixmap.rect(), mask, mask.rect())
         p.end()

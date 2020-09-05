@@ -1,23 +1,22 @@
 #! /usr/bin/python
 #-*- coding: utf-8 -*-
 
+import time, os, math
+import traceback
 
+from PyQt5.QtWidgets import QGraphicsItemGroup, QGraphicsPixmapItem, QGraphicsRectItem
+from PyQt5.QtGui import QPixmap, QColor, QPainter, QIcon
+from PyQt5.QtCore import QPointF
 
-from PyQt4 import QtCore,  Qt
-from PyQt4 import QtGui
-import os
 from physics import physics
-import math
 from bullet import Bullet
 from radarField import radarField
 from animation import animation
 
-import time
-
-class Robot(QtGui.QGraphicsItemGroup):
+class Robot(QGraphicsItemGroup):
     
     def __init__(self,  mapSize, parent, repr):
-        QtGui.QGraphicsItemGroup.__init__(self)
+        QGraphicsItemGroup.__init__(self)
         #Attributes
         self.__mapSize = mapSize
         self.__parent = parent
@@ -35,21 +34,21 @@ class Robot(QtGui.QGraphicsItemGroup):
         
         
         #graphics
-        self.maskColor = QtGui.QColor(0, 255, 255)
-        self.gunMaskColor = QtGui.QColor(0, 255, 255)
-        self.radarMaskColor = QtGui.QColor(0, 255, 255)
+        self.maskColor = QColor(0, 255, 255)
+        self.gunMaskColor = QColor(0, 255, 255)
+        self.radarMaskColor = QColor(0, 255, 255)
         
         #load img
-        self.__base = QtGui.QGraphicsPixmapItem()
-        self.__base.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/baseGrey.png")
+        self.__base = QGraphicsPixmapItem()
+        self.__base.pixmap = QPixmap(os.getcwd() + "/robotImages/baseGrey.png")
         self.__base.setPixmap(self.__base.pixmap)
         self.addToGroup(self.__base)
         self.__baseWidth = self.__base.boundingRect().width()
         self.__baseHeight = self.__base.boundingRect().height()
         
         #load gun img
-        self.__gun = QtGui.QGraphicsPixmapItem()
-        self.__gun.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/gunGrey.png")
+        self.__gun = QGraphicsPixmapItem()
+        self.__gun.pixmap = QPixmap(os.getcwd() + "/robotImages/gunGrey.png")
         self.__gun.setPixmap(self.__gun.pixmap)
         self.addToGroup(self.__gun)
         self.__gunWidth = self.__gun.boundingRect().width()
@@ -60,8 +59,8 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.__gun.setPos(x - self.__gunWidth/2.0 ,  y - self.__gunHeight /2.0)
         
         #load radar img
-        self.__radar = QtGui.QGraphicsPixmapItem()
-        self.__radar.pixmap = QtGui.QPixmap(os.getcwd() + "/robotImages/radar.png")
+        self.__radar = QGraphicsPixmapItem()
+        self.__radar.pixmap = QPixmap(os.getcwd() + "/robotImages/radar.png")
         self.__radar.setPixmap(self.__radar.pixmap)
         self.addToGroup(self.__radar)
         self.__radarWidth = self.__radar.boundingRect().width()
@@ -70,10 +69,10 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.__radar.setPos(x - self.__radarWidth/2.0 ,  y - self.__radarHeight /2.0)
         
         #load radarField
-        firstPoint = QtCore.QPointF(x - self.__radarWidth/2, y)
-        secondPoint = QtCore.QPointF(x + self.__radarWidth/2, y)
-        thirdPoint = QtCore.QPointF(x + 4*self.__radarWidth, y + 700)
-        fourthPoint = QtCore.QPointF(x - 4*self.__radarWidth, y+ 700)
+        firstPoint = QPointF(x - self.__radarWidth/2, y)
+        secondPoint = QPointF(x + self.__radarWidth/2, y)
+        thirdPoint = QPointF(x + 4*self.__radarWidth, y + 700)
+        fourthPoint = QPointF(x - 4*self.__radarWidth, y+ 700)
         qPointListe = []
         qPointListe.append(firstPoint)
         qPointListe.append(secondPoint)
@@ -84,8 +83,8 @@ class Robot(QtGui.QGraphicsItemGroup):
         #__largeRadarField
         qPointListe.remove(fourthPoint)
         qPointListe.remove(thirdPoint)
-        thirdPoint = QtCore.QPointF(x + 10*self.__radarWidth, y + 400)
-        fourthPoint = QtCore.QPointF(x - 10*self.__radarWidth, y+ 400)
+        thirdPoint = QPointF(x + 10*self.__radarWidth, y + 400)
+        fourthPoint = QPointF(x - 10*self.__radarWidth, y+ 400)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
         self.__largeRadarField = radarField(qPointListe, self, "poly")
@@ -93,8 +92,8 @@ class Robot(QtGui.QGraphicsItemGroup):
         #thinRadarField
         qPointListe.remove(fourthPoint)
         qPointListe.remove(thirdPoint)
-        thirdPoint = QtCore.QPointF(x + 0.4*self.__radarWidth, y + 900)
-        fourthPoint = QtCore.QPointF(x - 0.4*self.__radarWidth, y+ 900)
+        thirdPoint = QPointF(x + 0.4*self.__radarWidth, y + 900)
+        fourthPoint = QPointF(x - 0.4*self.__radarWidth, y+ 900)
         qPointListe.append(thirdPoint)
         qPointListe.append(fourthPoint)
         self.__thinRadarField = radarField(qPointListe, self, "poly")
@@ -154,7 +153,7 @@ class Robot(QtGui.QGraphicsItemGroup):
     def advance(self, i):
         """
         if i ==1:
-            print time.time() - self.a
+            print(time.time() - self.a)
             self.a = time.time()
         """
         if self.__health <= 0:
@@ -173,7 +172,11 @@ class Robot(QtGui.QGraphicsItemGroup):
                         pass
                 else:
                     self.stop()
-                    self.run()
+                    try:
+                        self.run()
+                    except:
+                        traceback.print_exc()
+                        exit(-1)
                     self.__physics.reverse()
                     try:
                         self.__currentAnimation  = self.__physics.animation.list.pop()
@@ -215,7 +218,7 @@ class Robot(QtGui.QGraphicsItemGroup):
                 
             #collisions
             for item in set(self.__base.collidingItems(1)) - self.__items:
-                if isinstance(item, QtGui.QGraphicsRectItem):
+                if isinstance(item, QGraphicsRectItem):
                     #wall Collision
                     self.__wallRebound(item)
                 elif isinstance(item, Robot):
@@ -248,14 +251,14 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.__gunLock = part
          
     def setGunColor(self, r, g, b):
-        color = QtGui.QColor(r, g, b)
+        color = QColor(r, g, b)
         mask = self.__gun.pixmap.createMaskFromColor(self.gunMaskColor,  1)
-        p = QtGui.QPainter(self.__gun.pixmap)
-        p.setPen(QtGui.QColor(r, g, b))
+        p = QPainter(self.__gun.pixmap)
+        p.setPen(QColor(r, g, b))
         p.drawPixmap(self.__gun.pixmap.rect(), mask, mask.rect())
         p.end()
         self.__gun.setPixmap(self.__gun.pixmap)
-        self.gunMaskColor = QtGui.QColor(r, g, b)
+        self.gunMaskColor = QColor(r, g, b)
         
     #----------------------------------------------------------Base-----------------------------------------------------
         
@@ -263,7 +266,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         s = 1
         if distance < 0:
             s = -1
-        steps = s*distance/self.__physics.step
+        steps = int(s*distance/self.__physics.step)
         d = distance%self.__physics.step
         if d != 0:
             self.__physics.move.append(s*d)
@@ -282,14 +285,14 @@ class Robot(QtGui.QGraphicsItemGroup):
             self.__physics.turn.append(s*self.__physics.step)
             
     def setColor(self, r, g, b):
-        color = QtGui.QColor(r, g, b)
+        color = QColor(r, g, b)
         mask = self.__base.pixmap.createMaskFromColor(self.maskColor,  1)
-        p = QtGui.QPainter(self.__base.pixmap)
-        p.setPen(QtGui.QColor(r, g, b))
+        p = QPainter(self.__base.pixmap)
+        p.setPen(QColor(r, g, b))
         p.drawPixmap(self.__base.pixmap.rect(), mask, mask.rect())
         p.end()
         self.__base.setPixmap(self.__base.pixmap)
-        self.maskColor = QtGui.QColor(r, g, b)
+        self.maskColor = QColor(r, g, b)
         
     #---------------------------------------------RADAR------------------------------------------------
     
@@ -331,14 +334,14 @@ class Robot(QtGui.QGraphicsItemGroup):
             self.__physics.radarTurn.append(s*self.__physics.step)
         
     def setRadarColor(self, r, g, b):
-        color = QtGui.QColor(r, g, b)
+        color = QColor(r, g, b)
         mask = self.__radar.pixmap.createMaskFromColor(self.radarMaskColor,  1)
-        p = QtGui.QPainter(self.__radar.pixmap)
-        p.setPen(QtGui.QColor(r, g, b))
+        p = QPainter(self.__radar.pixmap)
+        p.setPen(QColor(r, g, b))
         p.drawPixmap(self.__radar.pixmap.rect(), mask, mask.rect())
         p.end()
         self.__radar.setPixmap(self.__radar.pixmap)
-        self.radarMaskColor = QtGui.QColor(r, g, b)
+        self.radarMaskColor = QColor(r, g, b)
         
     def radarVisible(self, bol):
         self.__radarField.setVisible(bol)
@@ -376,7 +379,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         return id(bullet)
         
     def setBulletsColor(self, r, g, b):
-        self.bulletColor = QtGui.QColor(r, g, b)
+        self.bulletColor = QColor(r, g, b)
         
     #---------------------------------------General Methods---------------------------------------
     def stop(self):
@@ -388,20 +391,20 @@ class Robot(QtGui.QGraphicsItemGroup):
     def getPosition(self):
         p = self.pos()
         r = self.__base.boundingRect()
-        return QtCore.QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
+        return QPointF(p.x() + r.width()/2, p.y()+r.height()/2)
         
     def getGunHeading(self):
         angle = self.__gun.rotation()
-        if angle > 360:
-            a = int(angle) / 360
-            angle = angle - (360*a)
+        # if angle > 360:
+        #     a = int(angle) / 360
+        #     angle = angle - (360*a)
         return angle
         
     def getHeading(self):
         return self.__base.rotation()
         
     def getRadarHeading(self):
-        return self.__gun.rotation()
+        return self.__radar.rotation()
         
     def reset(self):
         self.__physics.reset()
@@ -432,7 +435,7 @@ class Robot(QtGui.QGraphicsItemGroup):
         y = pos.y()
         dx = - math.sin(math.radians(angle))*step
         dy = math.cos(math.radians(angle))*step
-        #print dx, dy
+        # print(dx, dy)
         return x+dx, y+dy
         
     def __setRadarRotation(self, angle):
@@ -467,7 +470,11 @@ class Robot(QtGui.QGraphicsItemGroup):
         self.setPos(self.pos().x() + x, self.pos().y() + y)
         self.__changeHealth(self,  -1)
         self.stop()
-        self.onHitWall()
+        try:
+            self.onHitWall()
+        except:
+            traceback.print_exc()
+            exit(-1)
         animation = self.__physics.makeAnimation()
         if animation != []:
             self.__currentAnimation = animation
@@ -475,31 +482,35 @@ class Robot(QtGui.QGraphicsItemGroup):
        
         
     def __robotRebound(self, robot):
-        self.reset()
-        robot.reset()
-        angle = self.__base.rotation()
-        pos = self.pos()
-        x = pos.x()
-        y = pos.y()
-        dx = - math.sin(math.radians(angle))*self.__physics.step*1.1
-        dy = math.cos(math.radians(angle))*self.__physics.step*1.1
-        self.setPos(x-dx, y-dy)
-        pos = robot.pos()
-        x = pos.x()
-        y = pos.y()
-        robot.setPos(x+dx, y+dy)
-        self.__changeHealth(robot,  -1)
-        self.__changeHealth(self,  -1)
-        self.stop()
-        self.onRobotHit(id(robot), robot.__repr__())
-        animation = self.__physics.makeAnimation()
-        if animation != []:
-            self.__currentAnimation = animation
-        robot.stop()
-        robot.onHitByRobot(id(self), self.__repr__())
-        animation = robot.__physics.makeAnimation()
-        if animation != []:
-            robot.__currentAnimation = animation
+        try:
+            self.reset()
+            robot.reset()
+            angle = self.__base.rotation()
+            pos = self.pos()
+            x = pos.x()
+            y = pos.y()
+            dx = - math.sin(math.radians(angle))*self.__physics.step*1.1
+            dy = math.cos(math.radians(angle))*self.__physics.step*1.1
+            self.setPos(x-dx, y-dy)
+            pos = robot.pos()
+            x = pos.x()
+            y = pos.y()
+            robot.setPos(x+dx, y+dy)
+            self.__changeHealth(robot,  -1)
+            self.__changeHealth(self,  -1)
+            self.stop()
+            self.onRobotHit(id(robot), robot.__repr__())
+            animation = self.__physics.makeAnimation()
+            if animation != []:
+                self.__currentAnimation = animation
+            robot.stop()
+            robot.onHitByRobot(id(self), self.__repr__())
+            animation = robot.__physics.makeAnimation()
+            if animation != []:
+                robot.__currentAnimation = animation
+        except:
+            traceback.print_exc()
+            exit(-1)
 
         
         
@@ -528,7 +539,11 @@ class Robot(QtGui.QGraphicsItemGroup):
         anim = target.robot.__currentAnimation
         target.robot.__physics.animation = target.robot.__targetAnimation
         target.robot.__physics.reset()
-        target.robot.onTargetSpotted(id(self), self.__repr__(), self.getPosition())
+        try:
+            target.robot.onTargetSpotted(id(self), self.__repr__(), self.getPosition())
+        except:
+            traceback.print_exc()
+            exit(-1)
         target.robot.__physics.newAnimation()
         target.robot.__physics.reverse()
         try:
@@ -554,14 +569,18 @@ class Robot(QtGui.QGraphicsItemGroup):
     def __death(self):
         
         try:
-            self.icon.setIcon(QtGui.QIcon(os.getcwd() + "/robotImages/dead.png"))
-            self.icon2.setIcon(QtGui.QIcon(os.getcwd() + "/robotImages/dead.png"))
+            self.icon.setIcon(QIcon(os.getcwd() + "/robotImages/dead.png"))
+            self.icon2.setIcon(QIcon(os.getcwd() + "/robotImages/dead.png"))
             self.progressBar.setValue(0)
         except :
             pass
         self.__parent.deadBots.append(self)
         self.__parent.aliveBots.remove(self)
-        self.onRobotDeath()
+        try:
+            self.onRobotDeath()
+        except:
+            traceback.print_exc()
+            exit(-1)
         self.__parent.removeItem(self)
         if  len(self.__parent.aliveBots) <= 1:
             self.__parent.battleFinished()

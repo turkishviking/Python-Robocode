@@ -4,8 +4,9 @@
 Module implementing RobotInfo.
 """
 
-from PyQt4.QtGui import QWidget
-from PyQt4.QtCore import pyqtSignature
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import pyqtSlot
+
 from outPrint import outPrint
 from Ui_RobotInfo import Ui_Form
 
@@ -22,7 +23,7 @@ class RobotInfo(QWidget, Ui_Form):
         self.out = outPrint()
 
     
-    @pyqtSignature("")
+    @pyqtSlot()
     def on_pushButton_clicked(self):
         """
         Slot documentation goes here.
@@ -31,7 +32,7 @@ class RobotInfo(QWidget, Ui_Form):
         self.out.setWindowTitle(str(self.robot))
         self.out.show()
     
-    @pyqtSignature("int")
+    @pyqtSlot(int)
     def on_progressBar_valueChanged(self, value):
         """
         Slot documentation goes here.

@@ -4,8 +4,7 @@
 Module implementing outPrint.
 """
 
-from PyQt4.QtGui import QWidget
-from PyQt4.QtCore import pyqtSignature,  SIGNAL
+from PyQt5.QtWidgets import QWidget
 
 from Ui_outPrint import Ui_Form
 
