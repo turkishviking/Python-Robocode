@@ -42,6 +42,7 @@ class Battle(QDialog, Ui_Dialog):
                                 break
                     except Exception as e:
                         print("Problem with bot file '{}': {}".format(botFile, str(e)))
+
                         
         for key in self.listBots.keys():
             self.listWidget.addItem(key)

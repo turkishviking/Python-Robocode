@@ -41,6 +41,7 @@ class Graph(QGraphicsScene):
                     self.Parent.addRobotInfo(robot)
                 except Exception as e:
                     print("Problem with bot file '{}': {}".format(bot, str(e)))
+
             self.Parent.battleMenu.close()
         except ValueError:
             QMessageBox.about(self.Parent, "Alert", "Too many Bots for the map's size!")
