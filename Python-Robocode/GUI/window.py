@@ -4,7 +4,12 @@
 Module implementing MainWindow.
 """
 
-import os,  pickle
+import os
+import pickle
+import re
+
+from twisted.python import reflect
+from importlib import reload
 
 from PyQt5.QtWidgets import QMainWindow, QGraphicsScene, QHeaderView, QTableWidgetItem
 from PyQt5.QtCore import pyqtSlot, QTimer
@@ -15,6 +20,7 @@ from battle import Battle
 from robot import Robot
 from RobotInfo import RobotInfo
 from statistic import statistic
+
 
 class MainWindow(QMainWindow, Ui_MainWindow):
     """
@@ -30,14 +36,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.timer = QTimer()
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableWidget.hide()
-        
-    
+
+    def reimport_class(self, cls):
+        """
+        Reload and reimport class "cls".
+        """
+
+        mod = __import__(cls.__module__, fromlist=[cls.__name__])
+        reload(mod)
+
+        return getattr(mod, cls.__name__)
+
     @pyqtSlot()
     def on_pushButton_clicked(self):
         """
         Start the last battle
         """
-        
+
         if os.path.exists(os.getcwd() + "/.datas/lastArena"):
             with open(os.getcwd() + "/.datas/lastArena",  'rb') as file:
                 unpickler = pickle.Unpickler(file)
@@ -45,8 +60,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             file.close()
         else:
             print("No last arena found.")
-
-        self.setUpBattle(dico["width"] , dico["height"], dico["botList"] )
+        
+        botList = [self.reimport_class(bot) for bot in dico["botList"]]
+        self.setUpBattle(dico["width"], dico["height"], botList)
         
     def setUpBattle(self, width, height, botList):
         self.tableWidget.clearContents()
